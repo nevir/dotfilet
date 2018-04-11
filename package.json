@@ -1,0 +1,8 @@
+{
+  "name": "dotfilet",
+  "version": "0.0.1",
+  "description": "A composable dotfile manager and project scaffolder.",
+  "repository": "https://github.com/nevir/dotfilet",
+  "author": "Ian MacLeod <ian@nevir.net>",
+  "license": "Apache-2.0"
+}
