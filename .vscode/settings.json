@@ -8,7 +8,7 @@
     "**/.*": true,
     "**/*.lock": true,
     "dprint.json": true,
-    "GEMINI.md": true,
+    "AGENTS.md": true
   },
 
   // Formatting
