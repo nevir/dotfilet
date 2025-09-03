@@ -78,7 +78,7 @@ Removes the agent’s installed configuration.
 
 ### 3.2. Core Configuration Schema
 
-[Details to be added from #9]
+[Details to be added from #9](https://github.com/nevir/dotfilet/issues/9)
 
 Misc decisions / thoughts:
 
@@ -86,9 +86,22 @@ Misc decisions / thoughts:
 * Configuration ultimately compiles down to one big JSON object
   * So that lets most of dotfilet bet agnostic to CUE; and also support other tools that just spit out the final JSON
 
-### 3.3. Variables & Secrets
+## 4. Architecture
 
-[Details to be added from #10]
+### 4.1. Sync Agent
+
+[Details to be added from #8](https://github.com/nevir/dotfilet/issues/8)
+
+### 4.2. Plugin Architecture
+
+Misc decisions / thoughts:
+
+* Plugins are external processes
+* Plugins communicate with dotfilet via JSON-RPC
+
+### 4.3. Variables & Secrets
+
+[Details to be added from #10](https://github.com/nevir/dotfilet/issues/10)
 
 Misc decisions / thoughts:
 
@@ -103,7 +116,7 @@ Misc decisions / thoughts:
   * Plugins need some way to provide secrets (and other variables?)
   * Are secrets just specially managed variables?
 
-### 3.4. Configuration Writeback
+### 4.4. Configuration Writeback
 
 Misc decisions / thoughts:
 
@@ -111,24 +124,11 @@ Misc decisions / thoughts:
   * Rely on a standard .cue file structure to write back to that by default
   * If the convention can’t be followed, have some failsafe (“overrides.cue” or something?)
 
-## 4. Architecture
-
-### 4.1. Sync Agent
-
-[Details to be added from #8]
-
-### 4.2. Plugin Architecture
-
-Misc decisions / thoughts:
-
-* Plugins are external processes
-* Plugins communicate with dotfilet via JSON-RPC
-
 ## 5. Protocols
 
 ### 5.1. Plugin JSON-RPC Protocol
 
-[Details to be added from #12]
+[Details to be added from #12](https://github.com/nevir/dotfilet/issues/12)
 
 Misc:
 
@@ -151,17 +151,17 @@ Methods (names TBD):
 
 ### 6.1. Security Model
 
-[Details to be added from #14]
+[Details to be added from #14](https://github.com/nevir/dotfilet/issues/14)
 
 ## 7. Error Handling & Reporting
 
-[Details to be added from #11]
+[Details to be added from #11](https://github.com/nevir/dotfilet/issues/11)
 
 ## 8. Appendix
 
 ### 8.1. Plugin Prototype Ideas
 
-[Details to be added from #13]
+[Details to be added from #13](https://github.com/nevir/dotfilet/issues/13)
 
 ### 8.2. Open Questions
 
