@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "dprint.dprint",
+    "amodio.toggle-excluded-files",
+    "tamasfe.even-better-toml",
+    "kejun.markdown-alert",
+  ],
+}

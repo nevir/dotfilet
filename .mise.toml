@@ -1,0 +1,11 @@
+[tools]
+dprint = "0.50.0"
+rust = "1.87.0"
+
+# Tasks
+
+[tasks.fix-style]
+run = "dprint fmt"
+
+[tasks.test-style]
+run = "dprint check"
