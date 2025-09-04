@@ -200,6 +200,22 @@ Dotfilet core automatically discovers and loads plugins based on the configurati
 
 - **Lazy Loading**: Plugins are loaded on-demand when their configuration sections are encountered, minimizing resource usage for unused applications.
 
+#### Plugin Execution Environment
+
+Plugins operate within a controlled environment provided by Dotfilet core:
+
+- **Working Directory**: Each plugin receives a dedicated working directory for temporary files and state storage at `~/.dotfilet/plugins/<plugin-name>/`.
+
+- **Environment Variables**: Dotfilet injects standard environment variables into plugin processes:
+  - `DOTFILET_PLUGIN_WORKDIR`: Path to the plugin's working directory
+  - `DOTFILET_HOST`: Current host name being configured
+  - `DOTFILET_CONFIG_ROOT`: Path to the configuration repository root
+  - `DOTFILET_DRY_RUN`: Set to `true` when running in dry-run mode
+
+- **No State Caching**: Plugins should not cache system state between operations. The Dotfilet core handles caching and state comparison to ensure consistency.
+
+- **JSON-RPC Communication**: All plugin communication occurs through the JSON-RPC protocol over WebSocket connections, ensuring structured and reliable data exchange.
+
 #### Plugin Responsibilities
 
 Each plugin manages a specific application or system aspect with clearly defined responsibilities:
@@ -216,11 +232,78 @@ Each plugin manages a specific application or system aspect with clearly defined
 
 - **Unknown Config Support**: Handle configuration keys introduced by app updates before plugin updates.
 
+#### Plugin Failure Handling
+
+> [!WARNING]
+>
+> **Open Question: Plugin Failure Recovery**
+>
+> How should Dotfilet handle plugin failures during configuration application? Key scenarios include:
+>
+> - **Partial Application**: When a plugin fails after partially applying configuration changes
+> - **State Corruption**: When system state becomes inconsistent due to plugin crashes
+> - **Rollback Strategy**: Whether failed operations should be automatically rolled back
+> - **Error Propagation**: How plugin failures should affect other plugins and overall operation success
+> - **Recovery Mechanisms**: Whether plugins should implement self-healing or state validation capabilities
+>
+> These failure modes require careful consideration as they directly impact system reliability and user trust.
+
 > [!IMPORTANT]
 >
 > **Handling Race Conditions**
 >
 > Plugins must use declarative write operations (e.g., `set key X to value Y`) rather than state-dependent operations (e.g., `if key X is Z, then set it to Y`) to ensure final state matches configuration regardless of timing.
+
+### Security Model
+
+Dotfilet's plugin architecture requires careful security considerations, as plugins often need elevated privileges to modify system configuration.
+
+#### Process Isolation
+
+- **Separate Processes**: Each plugin runs in its own isolated process, preventing crashes or security issues in one plugin from affecting others.
+
+- **Privilege Limitation**: Plugins should run with the minimum privileges necessary for their operation.
+
+#### File System Access
+
+> [!WARNING]
+>
+> **Open Question: File System Sandboxing**
+>
+> How should Dotfilet restrict plugin file system access? Considerations include:
+>
+> - **Path Allowlisting**: Plugins declare required file paths in their schema, with access restricted to those paths
+> - **macOS Sandbox**: Integration with macOS App Sandbox for fine-grained permissions
+> - **User Consent**: When plugins require access to sensitive locations (e.g., browser profiles, SSH keys)
+> - **Audit Logging**: Recording all file system operations for security review
+
+#### Privilege Escalation
+
+Many macOS configuration changes require administrator privileges (system settings, installing applications, etc.).
+
+> [!WARNING]
+>
+> **Open Question: Privilege Management**
+>
+> How should Dotfilet handle operations requiring elevated privileges?
+>
+> - **Sudo Integration**: Prompt for sudo when needed, with clear indication of which plugin/operation requires it
+> - **Pre-authorization**: Allow users to pre-authorize specific plugins for elevated access
+> - **Privilege Separation**: Run only specific operations with elevated privileges, not entire plugins
+> - **Security Prompts**: Integration with macOS security prompts and user consent
+
+#### Plugin Trust & Verification
+
+> [!WARNING]
+>
+> **Open Question: Plugin Authentication**
+>
+> How should users verify plugin authenticity and safety?
+>
+> - **Code Signing**: Require plugins to be code-signed by known developers
+> - **Plugin Registry**: Maintain a curated registry of trusted plugins
+> - **Source Verification**: Allow installation only from trusted sources (GitHub releases, etc.)
+> - **Capability Declaration**: Plugins must declare their required permissions upfront
 
 #### Sync Agent
 
@@ -253,7 +336,7 @@ Following Dotfilet's convention-over-configuration approach, users should define
 package config
 
 $host: string @tag(host)
-$git_username: string @tag(git_username) 
+$git_username: string @tag(git_username)
 $git_email: string @tag(git_email)
 $onepassword_account: string @tag(onepassword_account)
 ```
@@ -268,7 +351,7 @@ if $host == "personal-laptop" {
 	}
 }
 
-// programs/git.cue  
+// programs/git.cue
 programs: git: {
 	user: {
 		name:  $git_username
@@ -324,6 +407,20 @@ When plugins detect that system state has diverged from the declared configurati
 
 4. **Formatting-Preserving Updates**: The agent modifies only the specific configuration values that changed, carefully preserving existing formatting, comments, and file structure in the CUE files.
 
+#### Conflict Resolution
+
+Dotfilet handles conflicts between configuration files and system state based on the operation context:
+
+- **During `dotfilet apply`**: Configuration values take precedence—the declared state in your CUE files is applied to the system, overriding any conflicting system state.
+
+- **During agent sync**: System values take precedence—changes detected by the agent are written back to configuration files, treating the system as the source of truth.
+
+- **Concurrent operations**: When applying configuration while the sync agent is running, the agent will detect the applied changes. These should theoretically match the configuration being written and result in idempotent/no-op writebacks, but there are potential edge cases:
+
+  - **Agent pause consideration**: Should the agent pause monitoring during apply operations to minimize noise? This reduces false positives but risks missing legitimate concurrent changes.
+
+  - **Value flapping detection**: Should the system detect when values are oscillating between states and take corrective action? This requires additional complexity to identify flapping patterns.
+
 #### Convention-Based Writeback
 
 Writeback relies on following Dotfilet's [conventional configuration](#conventional-configuration) structure:
@@ -346,28 +443,7 @@ Users can configure writeback behavior:
 >
 > Writeback works best when you follow Dotfilet's conventional directory structure. While not required, this convention enables the agent to make targeted, predictable updates to your configuration files.
 
-### Additional Architectural Considerations
+## Related Documents
 
-- **Secrets**:
-
-  - Must be represented via some special string tokens `<<1pass:secret_id>>`(?) that gets interpolated.
-
-  - Secrets mean there is some sense of dependency resolution required (e.g. cannot sync configuration that relies on vars/secrets until they are present on the system. E.g. cannot use 1password secrets until 1Password is installed / configured)
-
-  - We need some way to wait for the user to configure/unlock these tools
-
-  - Plugins need some way to provide secrets (and other variables?)
-
-  - Are secrets just specially managed variables?
-
-## Appendix
-
-### Open Questions
-
-- **Managed applications**:
-
-  - Should be able to manage application installation via homebrew
-
-  - ^ If someone removes a managed application from the configuration, we should uninstall it
-
-  - Leave room to support other package managers (nix, etc)
+- [Plugin Protocol](./Plugin%20Protocol.md): Complete specification of the JSON-RPC communication protocol between Dotfilet core and plugins.
+- [Roadmap](./Roadmap.md): Planned features and enhancements for future releases.
