@@ -1,1 +1,1 @@
-hosts: "work-laptop": {}
+if $host == "work-laptop" {}
