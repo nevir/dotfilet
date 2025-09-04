@@ -2,7 +2,7 @@
 
 This document outlines the vision, architecture, and core concepts for Dotfilet, a declarative configuration management tool for macOS (and potentially other operating systems in the future).
 
-## 1. Vision & Guiding Principles
+## Vision & Guiding Principles
 
 Dotfilet aims to be the **definitive tool for developers** to manage their entire macOS environment declaratively. It treats your machine's configuration as code, allowing it to be versioned, shared, and reliably reproduced across multiple machines.
 
@@ -14,21 +14,21 @@ Dotfilet aims to be the **definitive tool for developers** to manage their entir
 
 - **Ergonomics First:** The configuration language and CLI should be intuitive for developers, with great IDE support and clear feedback.
 
-## 2. Core Concepts & Terminology
+## Core Concepts & Terminology
 
 Understanding these terms is key to the Dotfilet architecture.
 
 - **Plugin:** A self-contained module responsible for managing a single application (e.g., vscode, macos-dock, git). Each plugin knows how to read, write, and validate the configuration for its target.
 
-- **Configuration:** The set of files written by the user that declare the desired state of their system.
+- **Configuration:** The compiled configuration (e.g. for all plugins) that a user wants to deploy to their machine. Commonly expressed via a collection of [CUE](https://cuelang.org/) files.
 
-- **State:** The final, merged configuration object that represents the complete desired state for a machine.
+- **Variable/Secret:** A value that can be injected into the configuration from an external source (e.g., user prompt, an environment variable, a 1Password value).
 
-- **Variable/Secret:** A value that can be injected into the configuration from an external source (e.g., an environment variable, a 1Password vault).
+- **Host:** A machine that configuration is deployed on. Each host is given a name that the user can refer to (e.g. for overriding configuration).
 
-## 3. User Experience (UX) & Configuration
+## User Experience (UX) & Configuration
 
-### 3.1. CLI Commands
+### CLI Commands
 
 The primary interface is the Dotfilet CLI.
 
@@ -76,57 +76,107 @@ Installs configuration (e.g. launchd) for the agent to be persistent.
 
 Removes the agent’s installed configuration.
 
-### 3.2. Core Configuration Schema
+### Conventional Configuration
 
-[The core configuration schema is defined in the `Configuration-Schema.md` document.](./Configuration-Schema.md)
+While Dotfilet directly accepts a JSON object that expresses the machine configuration, it is more common to express machine configuration as a collection of [CUE](https://cuelang.org/) files following a standard convention.
+
+Dotfilet will discover and load all `.cue` files in a directory, and treat their merged configuration as its own. Users are encouraged—but not required—to follow Dotfilet's conventions:
+
+```
+<config root>/
+  hosts/  # Overrides for specific machines.
+    <host-name>.cue
+    …
+  <platform>/  # Platform-specific configuration (e.g. for MacOS)
+    <category>.cue
+    …
+  programs/  # Specific programs and their configuration.
+    <program>.cue
+    …
+```
+
+> [!TIP]
+>
+> Following this convention allows Dotfilet to enable features like [bi-directional sync](#41-sync-agent); but it does not enforce or require that they are followed.
+
+#### `hosts/<host-name>.cue`
+
+A typical host file looks something like:
+
+```cue
+// hosts/personal-laptop.cue
+if $host == "personal-laptop" {
+	programs: {
+		"slack": {
+			enabled: false
+		}
+	}
+}
+```
+
+#### `<platform>/<category>.cue`
+
+Configuration for some aspect of the host's operating system. For example:
+
+```cue
+// macos/dock.cue
+macos: dock: {
+	autohide:    true
+	showRecents: false
+}
+```
+
+#### `programs/<program>.cue`
+
+Configuration for a specific program. For example:
+
+```cue
+// programs/google-chrome.cue
+programs: "google-chrome": {
+	extensions: {
+		// Google Docs Offline
+		ghbmnnjooekpmoecnnnilnnbdlolhkhi: {}
+	}
+}
+```
+
+#### CUE Environment
+
+Dotfilet injects a few values into the CUE configuration for your convenience:
+
+`$host`: The name of the current host, that configuration is being applied to.
+
+## Architecture
 
 Misc decisions / thoughts:
 
-- CUE is the configuration language
-- Configuration ultimately compiles down to one big JSON object
-  - So that lets most of dotfilet bet agnostic to CUE; and also support other tools that just spit out the final JSON
-
-## 4. Architecture
-
-### 4.1. Sync Agent
-
-[Details to be added from #8](https://github.com/nevir/dotfilet/issues/8)
-
-### 4.2. Plugin Architecture
-
-Misc decisions / thoughts:
-
-- Plugins are external processes
-- Plugins communicate with dotfilet via JSON-RPC
-
-### 4.3. Variables & Secrets
-
-[Details to be added from #10](https://github.com/nevir/dotfilet/issues/10)
-
-Misc decisions / thoughts:
-
+- CUE CLI & Agent:
+  - Operates on directories/repositories of .cue files
+    - Injects CUE schemata for validation
+    - Injects variables (e.g. $host) for contextual config
+- Plugins:
+  - Are external processes that communicate with Dotfilet via JSON-RPC
+  - Are responsible with subsets of overall configuration
+    - Expose configuration schema (as CUE schemata) for validation
+  - Typically translate system/app config using a deterministic approach (e.g. camelCasing keys, etc)
+    - and support _unknown_ config values (e.g. introduced during an app update, but before the plugin has been updated to be aware of it)
 - Variables are context
-  - Hostname
-  - Etc
-- Variables should be persisted if we prompt the user for them
+  - $host, etc
+  - Should be persisted if we prompt the user for them (e.g. when not derived from environment)
 - Secrets:
   - Must be represented via some special string tokens `<<1pass:secret_id>>`(?) that gets interpolated.
   - Secrets mean there is some sense of dependency resolution required (e.g. cannot sync configuration that relies on vars/secrets until they are present on the system. E.g. cannot use 1password secrets until 1Password is installed / configured)
   - We need some way to wait for the user to configure/unlock these tools
   - Plugins need some way to provide secrets (and other variables?)
   - Are secrets just specially managed variables?
+- Configuration writeback
+  - Convention over configuration
+    - Rely on a standard .cue file structure to write back to that by default
+    - If the convention can’t be followed, have some failsafe (“overrides.cue” or something?)
 
-### 4.4. Configuration Writeback
+## Protocols
 
-Misc decisions / thoughts:
-
-- Convention over configuration
-  - Rely on a standard .cue file structure to write back to that by default
-  - If the convention can’t be followed, have some failsafe (“overrides.cue” or something?)
-
-## 5. Protocols
-
-### 5.1. Plugin JSON-RPC Protocol
+### Plugin JSON-RPC Protocol
 
 [Details to be added from #12](https://github.com/nevir/dotfilet/issues/12)
 
@@ -147,23 +197,23 @@ Methods (names TBD):
   - `remoteChanges`: Sends any configuration values that were changed out of band.
   - `subscribeToFilesystem`: Asks the server to perform file system watching on specific paths
 
-## 6. Security
+## Security
 
-### 6.1. Security Model
+### Security Model
 
 [Details to be added from #14](https://github.com/nevir/dotfilet/issues/14)
 
-## 7. Error Handling & Reporting
+## Error Handling & Reporting
 
 [Details to be added from #11](https://github.com/nevir/dotfilet/issues/11)
 
-## 8. Appendix
+## Appendix
 
-### 8.1. Plugin Prototype Ideas
+### Plugin Prototype Ideas
 
 [Details to be added from #13](https://github.com/nevir/dotfilet/issues/13)
 
-### 8.2. Open Questions
+### Open Questions
 
 - Managed applications
   - Should be able to manage application installation via homebrew
