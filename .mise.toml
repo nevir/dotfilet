@@ -5,7 +5,17 @@ rust = "1.87.0"
 # Tasks
 
 [tasks.fix-style]
+description = "Auto-format files to address style/lint issues"
 run = "dprint fmt"
 
 [tasks.test-style]
+description = "Check whether files adhere to style/lint rules"
 run = "dprint check"
+
+[tasks.example-config]
+description = "Emit the compiled configuration of an example"
+usage = '''
+arg "<example>" "The name of the example directory under ./examples/"
+complete "example" run="ls ./examples"
+'''
+run = "cue export examples/{{arg(name='example')}}/**/*.cue"
