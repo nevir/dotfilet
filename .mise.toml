@@ -19,4 +19,4 @@ usage = '''
 arg "<example>" "The name of the example directory under ./examples/"
 complete "example" run="ls ./examples"
 '''
-run = "cue export examples/{{arg(name='example')}}/**/*.cue"
+run = "cue export examples/{{arg(name='example')}}{/**,}/*.cue -t host=personal-laptop"

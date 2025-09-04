@@ -236,6 +236,78 @@ The background agent enables bidirectional synchronization between configuration
 
 - **Configuration Writeback**: Update configuration files when changes are made outside of Dotfilet (following conventional file structure).
 
+### Variable System
+
+Dotfilet leverages CUE's tag variable system to inject dynamic values into configuration, enabling flexible, context-aware setups across different machines and environments.
+
+#### CUE Tag Variables
+
+Variables in Dotfilet are implemented using [CUE tag variables](https://cuelang.org/docs/howto/inject-system-information-into-evaluation-using-tag-variable/), which allow external values to be injected during evaluation.
+
+#### Conventional Variables File
+
+Following Dotfilet's convention-over-configuration approach, users should define variables centrally in a `variables.cue` file using the `$variable` syntax:
+
+```cue
+// variables.cue - Define all configurable variables
+package config
+
+$host: string @tag(host)
+$git_username: string @tag(git_username) 
+$git_email: string @tag(git_email)
+$onepassword_account: string @tag(onepassword_account)
+```
+
+These variables can then be referenced throughout your configuration files:
+
+```cue
+// hosts/personal-laptop.cue
+if $host == "personal-laptop" {
+	programs: "slack": {
+		enabled: false
+	}
+}
+
+// programs/git.cue  
+programs: git: {
+	user: {
+		name:  $git_username
+		email: $git_email
+	}
+}
+```
+
+#### Variable Resolution & Prompting
+
+When Dotfilet encounters undefined tag variables during configuration evaluation:
+
+1. **Error Detection**: Dotfilet recognizes CUE tag evaluation errors and identifies missing variables.
+
+2. **User Prompting**: Missing variables trigger interactive prompts asking users to provide values.
+
+3. **Value Persistence**: Once provided, variable values are automatically persisted to prevent repeated prompting.
+
+#### Variable Persistence
+
+Variable values are stored using a hierarchical configuration system similar to plugin search paths:
+
+- **Global Variables**: Stored in `~/.dotfilet/variables.json` for user-wide defaults
+- **Repository Variables**: Stored in `./.dotfilet/variables.json` for repository-specific overrides
+- **Priority Resolution**: Repository-specific variables take precedence over global ones
+
+Example persistence structure:
+
+```json
+{
+  "host": "personal-laptop",
+  "git_username": "John Doe",
+  "git_email": "john@example.com",
+  "onepassword_account": "my-family"
+}
+```
+
+This approach ensures variables are resolved consistently across `dotfilet` operations while allowing per-repository customization when needed.
+
 ### Configuration Writeback
 
 One of Dotfilet's key differentiators is bidirectional synchronization—the ability to detect changes made to system configuration outside of Dotfilet and write them back to your configuration files. This prevents configuration drift and ensures your repository remains the authoritative source of truth.
@@ -275,12 +347,6 @@ Users can configure writeback behavior:
 > Writeback works best when you follow Dotfilet's conventional directory structure. While not required, this convention enables the agent to make targeted, predictable updates to your configuration files.
 
 ### Additional Architectural Considerations
-
-- **Variables as Context**:
-
-  - $host, etc
-
-  - Should be persisted if we prompt the user for them (e.g. when not derived from environment)
 
 - **Secrets**:
 
