@@ -170,6 +170,8 @@ Misc decisions / thoughts:
 
     - and support _unknown_ config values (e.g. introduced during an app update, but before the plugin has been updated to be aware of it)
 
+  - Plugins are evaluated in parallel.
+
 - **Variables are context**:
 
   - $host, etc
@@ -200,31 +202,29 @@ Misc decisions / thoughts:
 
 Dotfilet operates on a simple principle: the configuration describes **desired state**, while **actual state** is managed directly by the platform or programs being configured. There is no intermediate state database. Plugins read from and write to the authoritative sources directly.
 
-#### State Discovery & Diffing
+This separation of concerns is key to Dotfilet's design. The core system and plugins have distinct roles.
 
-- **Plugin Responsibility**: Each plugin is responsible for reading the current state of the system it manages (e.g., reading plist files, querying APIs, parsing config files).
+#### Core Responsibilities
 
-- **No Caching**: Since `dotfilet apply` operations are expected to be slow and infrequent, plugins should read fresh state on each operation rather than maintaining caches.
+- **State Comparison and Diffing**: The core is responsible for comparing the user's desired configuration against the actual state reported by plugins. It computes the minimal set of changes required and instructs plugins on which specific actions to take. This ensures that only necessary changes are applied to the system.
 
-- **Core Diffing**: Dotfilet core compares the desired configuration against the actual state returned by plugins, computing the minimal set of changes needed.
+#### Plugin Responsibilities
 
-- **Idempotency**: The core ensures that applying the same configuration multiple times produces the same result, minimizing unnecessary writes to the system.
+- **State Discovery**: Each plugin is responsible for reading the current state of the system it manages (e.g., reading plist files, querying APIs, parsing config files). Since `dotfilet` operations are expected to be infrequent, plugins should read fresh state on each operation rather than maintaining their own caches.
 
-#### Configuration Application
+- **Configuration Application**: Plugins are responsible for writing configuration changes and handling any required side effects (e.g., restarting the macOS Dock after modifying its preferences).
 
-- **Plugin Write Operations**: Plugins handle writing configuration changes and any required side effects (e.g., restarting the macOS Dock after modifying dock preferences).
-
-- **Change Minimization**: Dotfilet core only asks plugins to apply changes that represent actual differences between desired and actual state.
+- **Idempotency**: It is a plugin's responsibility to be idempotent. Applying the same configuration multiple times should produce the same result. For example, a plugin should not erroneously append a value to a list that is meant to contain only one copy of that value.
 
 - **Error Handling**: Partial failures in one plugin should not prevent other plugins from applying their configurations.
 
-#### Variable Resolution
-
-- **User-Defined**: Users can define arbitrary variables in their configuration.
-
-- **Prompt When Missing**: If a variable is referenced but not defined, Dotfilet prompts the user for the value.
-
-- **No Persistence**: Variable values are resolved at runtime; no complex variable storage or scoping mechanisms.
+> [!IMPORTANT]
+>
+> **Handling Race Conditions**
+>
+> A race condition can occur if the system's state changes between the time a plugin reads it and the time it writes a new configuration. For example, a user might change a setting in a GUI at the exact moment `dotfilet apply` is running.
+>
+> This is primarily handled by **plugin idempotency**. A well-written plugin's "write" operation should not depend on the state it previously read. Instead, it should be a self-contained, declarative action (e.g., `set key X to value Y`, not `if key X is Z, then set it to Y`). This ensures the final state is always what the configuration intends, regardless of the state at the beginning of the operation.
 
 #### Agent State Monitoring
 
