@@ -78,7 +78,7 @@ Removes the agent’s installed configuration.
 
 ### 3.2. Core Configuration Schema
 
-[Details to be added from #9](https://github.com/nevir/dotfilet/issues/9)
+[The core configuration schema is defined in the `Configuration-Schema.md` document.](./Configuration-Schema.md)
 
 Misc decisions / thoughts:
 
