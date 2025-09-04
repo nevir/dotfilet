@@ -148,31 +148,135 @@ Dotfilet injects a few values into the CUE configuration for your convenience:
 
 ## Architecture
 
-Misc decisions / thoughts:
+### System Components & Responsibilities
 
-- **CUE CLI & Agent**:
+Dotfilet is composed of three main components that work together to manage system configuration declaratively.
 
-  - Operates on directories/repositories of .cue files
+#### Dotfilet Core
 
-    - Injects CUE schemata for validation
+The core system orchestrates configuration management and serves as the central coordinator.
 
-    - Injects variables (e.g. $host) for contextual config
+**Responsibilities:**
 
-- **Plugins**:
+- **Configuration Loading**: Discovers and loads CUE files, merges them into a unified configuration, and validates against plugin schemas.
 
-  - Are external processes that communicate with Dotfilet via JSON-RPC
+- **State Comparison & Diffing**: Compares desired configuration against actual system state reported by plugins, computing the minimal set of changes needed.
 
-  - Are responsible with subsets of overall configuration
+- **Plugin Orchestration**: Manages plugin lifecycle, coordinates parallel execution, and handles inter-plugin dependencies.
 
-    - Expose configuration schema (as CUE schemata) for validation
+- **Variable Resolution**: Resolves configuration variables and prompts users for missing values when needed.
 
-  - Typically translate system/app config using a deterministic approach (e.g. camelCasing keys, etc)
+- **Change Minimization**: Ensures only necessary changes are applied to the system, maintaining idempotency across operations.
 
-    - and support _unknown_ config values (e.g. introduced during an app update, but before the plugin has been updated to be aware of it)
+### Plugin System
 
-  - Plugins are evaluated in parallel.
+Dotfilet's plugin architecture enables extensible management of applications and system components through external processes that communicate via JSON-RPC.
 
-- **Variables are context**:
+See [Plugin Protocol](./Plugin Protocol.md) for the complete specification of how plugins communicate with the Dotfilet core system.
+
+#### Plugin Discovery & Loading
+
+Dotfilet core automatically discovers and loads plugins based on the configuration keys present in your CUE files:
+
+- **Configuration-Driven Loading**: Plugins are loaded only when their corresponding configuration keys are present. For example, including `programs: "1password": {}` in your configuration triggers loading of the 1Password plugin.
+
+- **Plugin Search Paths**: Dotfilet searches for plugins in multiple locations, allowing both bundled and third-party plugins:
+  - **Bundled Plugins**: Core plugins shipped with Dotfilet (e.g., `/usr/local/lib/dotfilet/plugins/`)
+  - **User Plugins**: User-installed plugins (e.g., `~/.dotfilet/plugins/`)
+  - **Project Plugins**: Repository-specific plugins (e.g., `./.dotfilet/plugins/`)
+
+- **Binary Plugin Format**: Each plugin is a single executable binary organized in a directory structure that mirrors configuration paths:
+  ```
+  <plugin-search-path>/
+    programs/
+      1password        # Handles programs.1password.*
+      google-chrome    # Handles programs.google-chrome.*
+    macos/
+      dock             # Handles macos.dock.*
+      security         # Handles macos.security.*
+  ```
+
+- **Plugin Resolution**: The core maps configuration paths to plugin binaries using a predictable naming convention, searching through all plugin search paths in priority order.
+
+- **Lazy Loading**: Plugins are loaded on-demand when their configuration sections are encountered, minimizing resource usage for unused applications.
+
+#### Plugin Responsibilities
+
+Each plugin manages a specific application or system aspect with clearly defined responsibilities:
+
+- **State Discovery**: Read current system state from authoritative sources (plist files, APIs, config files, etc.) without caching.
+
+- **Configuration Application**: Write configuration changes and handle required side effects (e.g., restarting services).
+
+- **Schema Definition**: Expose CUE schemas for configuration validation and IDE support.
+
+- **Idempotent Operations**: Ensure applying the same configuration multiple times produces identical results.
+
+- **Isolation**: Handle failures gracefully without affecting other plugins.
+
+- **Unknown Config Support**: Handle configuration keys introduced by app updates before plugin updates.
+
+> [!IMPORTANT]
+>
+> **Handling Race Conditions**
+>
+> Plugins must use declarative write operations (e.g., `set key X to value Y`) rather than state-dependent operations (e.g., `if key X is Z, then set it to Y`) to ensure final state matches configuration regardless of timing.
+
+#### Sync Agent
+
+The background agent enables bidirectional synchronization between configuration files and system state.
+
+**Responsibilities:**
+
+- **Baseline Establishment**: Read complete system state from all plugins on startup.
+
+- **Change Detection**: Monitor system state through periodic refresh and file system events.
+
+- **Drift Notification**: Emit updates via JSON-RPC when configuration drift is detected.
+
+- **Configuration Writeback**: Update configuration files when changes are made outside of Dotfilet (following conventional file structure).
+
+### Configuration Writeback
+
+One of Dotfilet's key differentiators is bidirectional synchronization—the ability to detect changes made to system configuration outside of Dotfilet and write them back to your configuration files. This prevents configuration drift and ensures your repository remains the authoritative source of truth.
+
+#### How Writeback Works
+
+When plugins detect that system state has diverged from the declared configuration, they collaborate with the sync agent to update your CUE files:
+
+1. **Change Detection**: Each plugin monitors the system/application it manages and detects when actual state differs from the last known configuration. Plugins may use shared facilities exposed by the agent (file watching, macOS defaults monitoring, etc.).
+
+2. **Change Emission**: When a plugin detects changes, it emits the configuration paths that need to be updated (e.g., `programs.vscode.settings.theme` or `macos.dock.autohide`).
+
+3. **File Resolution**: The agent receives these configuration path changes and determines which CUE file should be updated based on Dotfilet's conventional directory structure.
+
+4. **Formatting-Preserving Updates**: The agent modifies only the specific configuration values that changed, carefully preserving existing formatting, comments, and file structure in the CUE files.
+
+#### Convention-Based Writeback
+
+Writeback relies on following Dotfilet's [conventional configuration](#conventional-configuration) structure:
+
+- **Platform Changes**: System-level changes (e.g., macOS dock settings) are written to `<platform>/<category>.cue` files.
+
+- **Program Changes**: Application-specific changes are written to `programs/<program>.cue` files.
+
+- **Fallback Files**: Changes that don't fit the conventional directory structure are written to an `overrides.cue` file.
+
+#### User Control
+
+Users can configure writeback behavior:
+
+- **Selective Writeback**: Configure which plugins and configuration keys are eligible for automatic writeback.
+
+- **Writeback Disable**: Disable writeback entirely for users who prefer manual configuration management.
+
+> [!TIP]
+>
+> Writeback works best when you follow Dotfilet's conventional directory structure. While not required, this convention enables the agent to make targeted, predictable updates to your configuration files.
+
+### Additional Architectural Considerations
+
+- **Variables as Context**:
 
   - $host, etc
 
@@ -189,56 +293,6 @@ Misc decisions / thoughts:
   - Plugins need some way to provide secrets (and other variables?)
 
   - Are secrets just specially managed variables?
-
-- **Configuration writeback**:
-
-  - Convention over configuration
-
-    - Rely on a standard .cue file structure to write back to that by default
-
-    - If the convention can't be followed, have some failsafe ("overrides.cue" or something?)
-
-### State Management
-
-Dotfilet operates on a simple principle: the configuration describes **desired state**, while **actual state** is managed directly by the platform or programs being configured. There is no intermediate state database. Plugins read from and write to the authoritative sources directly.
-
-This separation of concerns is key to Dotfilet's design. The core system and plugins have distinct roles.
-
-#### Core Responsibilities
-
-- **State Comparison and Diffing**: The core is responsible for comparing the user's desired configuration against the actual state reported by plugins. It computes the minimal set of changes required and instructs plugins on which specific actions to take. This ensures that only necessary changes are applied to the system.
-
-#### Plugin Responsibilities
-
-- **State Discovery**: Each plugin is responsible for reading the current state of the system it manages (e.g., reading plist files, querying APIs, parsing config files). Since `dotfilet` operations are expected to be infrequent, plugins should read fresh state on each operation rather than maintaining their own caches.
-
-- **Configuration Application**: Plugins are responsible for writing configuration changes and handling any required side effects (e.g., restarting the macOS Dock after modifying its preferences).
-
-- **Idempotency**: It is a plugin's responsibility to be idempotent. Applying the same configuration multiple times should produce the same result. For example, a plugin should not erroneously append a value to a list that is meant to contain only one copy of that value.
-
-- **Error Handling**: Partial failures in one plugin should not prevent other plugins from applying their configurations.
-
-> [!IMPORTANT]
->
-> **Handling Race Conditions**
->
-> A race condition can occur if the system's state changes between the time a plugin reads it and the time it writes a new configuration. For example, a user might change a setting in a GUI at the exact moment `dotfilet apply` is running.
->
-> This is primarily handled by **plugin idempotency**. A well-written plugin's "write" operation should not depend on the state it previously read. Instead, it should be a self-contained, declarative action (e.g., `set key X to value Y`, not `if key X is Z, then set it to Y`). This ensures the final state is always what the configuration intends, regardless of the state at the beginning of the operation.
-
-#### Agent State Monitoring
-
-- **Boot State Read**: On startup, the agent reads complete state from all plugins to establish a baseline.
-
-- **Periodic Refresh**: The agent periodically re-reads complete state to catch changes made by external tools.
-
-- **Event-Based Updates**: Plugins can subscribe to file system changes or other events to detect state changes in real-time.
-
-- **Change Notifications**: When changes are detected, the agent emits updates via JSON-RPC (typically WebSocket-based) to notify of configuration drift.
-
-This approach keeps the system simple while enabling robust bidirectional synchronization between configuration files and system state.
-
-See [Plugin Protocol](./Plugin Protocol.md) for the complete specification of how plugins communicate with the Dotfilet core system.
 
 ## Appendix
 
