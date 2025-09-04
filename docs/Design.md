@@ -140,12 +140,6 @@ programs: "google-chrome": {
 }
 ```
 
-#### CUE Environment
-
-Dotfilet injects a few values into the CUE configuration for your convenience:
-
-`$host`: The name of the current host, that configuration is being applied to.
-
 ## Architecture
 
 ### System Components & Responsibilities
@@ -234,19 +228,15 @@ Each plugin manages a specific application or system aspect with clearly defined
 
 #### Plugin Failure Handling
 
-> [!WARNING]
->
-> **Open Question: Plugin Failure Recovery**
->
-> How should Dotfilet handle plugin failures during configuration application? Key scenarios include:
->
-> - **Partial Application**: When a plugin fails after partially applying configuration changes
-> - **State Corruption**: When system state becomes inconsistent due to plugin crashes
-> - **Rollback Strategy**: Whether failed operations should be automatically rolled back
-> - **Error Propagation**: How plugin failures should affect other plugins and overall operation success
-> - **Recovery Mechanisms**: Whether plugins should implement self-healing or state validation capabilities
->
-> These failure modes require careful consideration as they directly impact system reliability and user trust.
+**Recovery via Idempotency**
+
+Dotfilet does not perform automatic rollbacks when a plugin fails. Instead, it relies on two core principles:
+
+1. **Fail Fast**: If a plugin encounters an error during `dotfilet apply`, the entire operation halts immediately to prevent further changes and limit potential inconsistencies.
+
+2. **Idempotent Plugins**: Every plugin operation must be idempotent, meaning it can be run multiple times with the same outcome.
+
+If an operation fails, the user's path to recovery is to resolve the underlying issue (e.g., fix a misconfiguration, correct permissions) and simply **re-run `dotfilet apply`**. Because all operations are idempotent, the command will safely bring the system to the desired state without needing a complex rollback mechanism.
 
 > [!IMPORTANT]
 >
@@ -264,46 +254,36 @@ Dotfilet's plugin architecture requires careful security considerations, as plug
 
 - **Privilege Limitation**: Plugins should run with the minimum privileges necessary for their operation.
 
-#### File System Access
-
-> [!WARNING]
->
-> **Open Question: File System Sandboxing**
->
-> How should Dotfilet restrict plugin file system access? Considerations include:
->
-> - **Path Allowlisting**: Plugins declare required file paths in their schema, with access restricted to those paths
-> - **macOS Sandbox**: Integration with macOS App Sandbox for fine-grained permissions
-> - **User Consent**: When plugins require access to sensitive locations (e.g., browser profiles, SSH keys)
-> - **Audit Logging**: Recording all file system operations for security review
-
 #### Privilege Escalation
 
 Many macOS configuration changes require administrator privileges (system settings, installing applications, etc.).
 
+**Simplified Privilege Model:**
+
+- **Agent Privileges**: The sync agent runs as a system daemon with root privileges to monitor and modify system configuration.
+
+- **CLI Privileges**: The CLI runs with user privileges by default. When operations require elevated access, users must run the CLI with `sudo dotfilet apply` or similar.
+
+- **Plugin Execution**: Plugins inherit the privileges of their parent process (CLI or agent), running as subprocesses without additional privilege escalation mechanisms.
+
+#### Plugin Discovery & Distribution
+
+Dotfilet employs a tiered approach to plugin discovery and distribution:
+
+**Core Plugins**: Bundled plugins that ship with Dotfilet, located in the installation directory (e.g., `/usr/local/lib/dotfilet/plugins/`). These handle common macOS applications and system settings.
+
 > [!WARNING]
 >
-> **Open Question: Privilege Management**
+> **Open Question: Third-Party Plugin Installation**
 >
-> How should Dotfilet handle operations requiring elevated privileges?
+> How should users install community-developed plugins to extend Dotfilet's capabilities?
 >
-> - **Sudo Integration**: Prompt for sudo when needed, with clear indication of which plugin/operation requires it
-> - **Pre-authorization**: Allow users to pre-authorize specific plugins for elevated access
-> - **Privilege Separation**: Run only specific operations with elevated privileges, not entire plugins
-> - **Security Prompts**: Integration with macOS security prompts and user consent
-
-#### Plugin Trust & Verification
-
-> [!WARNING]
+> - **Plugin Registry**: Maintain a curated registry of community plugins with `dotfilet plugin install <name>` command
+> - **URL Installation**: Allow direct installation from URLs like `dotfilet plugin install https://github.com/user/plugin/releases/latest`
+> - **Package Managers**: Integration with existing package managers (Homebrew, etc.)
+> - **Manual Installation**: Users download and place plugins in designated directories
 >
-> **Open Question: Plugin Authentication**
->
-> How should users verify plugin authenticity and safety?
->
-> - **Code Signing**: Require plugins to be code-signed by known developers
-> - **Plugin Registry**: Maintain a curated registry of trusted plugins
-> - **Source Verification**: Allow installation only from trusted sources (GitHub releases, etc.)
-> - **Capability Declaration**: Plugins must declare their required permissions upfront
+> Plugin compatibility is ensured through CUE schema validation rather than explicit versioning.
 
 #### Sync Agent
 
@@ -417,9 +397,12 @@ Dotfilet handles conflicts between configuration files and system state based on
 
 - **Concurrent operations**: When applying configuration while the sync agent is running, the agent will detect the applied changes. These should theoretically match the configuration being written and result in idempotent/no-op writebacks, but there are potential edge cases:
 
-  - **Agent pause consideration**: Should the agent pause monitoring during apply operations to minimize noise? This reduces false positives but risks missing legitimate concurrent changes.
-
-  - **Value flapping detection**: Should the system detect when values are oscillating between states and take corrective action? This requires additional complexity to identify flapping patterns.
+> [!WARNING]
+>
+> **Open Question: Concurrent Operation Conflicts**
+>
+> - **Agent pause**: Should the agent pause monitoring during apply operations to minimize noise? This reduces false positives but risks missing legitimate concurrent changes.
+> - **Value flapping**: Should the system detect when values are oscillating between states and take corrective action? This requires additional complexity to identify flapping patterns.
 
 #### Convention-Based Writeback
 
