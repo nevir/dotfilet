@@ -8,7 +8,15 @@
     "**/.*": true,
     "**/*.lock": true,
     "dprint.json": true,
-    "AGENTS.md": true
+    "AGENTS.md": true,
+  },
+
+  // Environment
+  // ===========
+  "terminal.integrated.automationProfile.osx": {
+    "path": "/usr/bin/zsh",
+    // Ensure that VS Code loads our shell profile (e.g. ~/.zprofile).
+    "args": ["--login"],
   },
 
   // Formatting
