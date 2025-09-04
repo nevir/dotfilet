@@ -1,3 +1,1 @@
-programs: "slack": {
-
-}
+programs: "slack": {}

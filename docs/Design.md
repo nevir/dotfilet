@@ -6,25 +6,25 @@ This document outlines the vision, architecture, and core concepts for Dotfilet,
 
 Dotfilet aims to be the **definitive tool for developers** to manage their entire macOS environment declaratively. It treats your machine's configuration as code, allowing it to be versioned, shared, and reliably reproduced across multiple machines.
 
-- **Declarative:** You define the _desired state_ of your system in a config file; Dotfilet figures out how to make it so.
+- **Declarative**: You define the _desired state_ of your system in a config file; Dotfilet figures out how to make it so.
 
-- **Bi-directional Sync is Key:** Unlike most tools, Dotfilet isn't a one-way street. It can **read changes** made manually via GUI or CLI and help you commit them back to your configuration, preventing drift and making it the single source of truth.
+- **Bi-directional Sync is Key**: Unlike most tools, Dotfilet isn't a one-way street. It can **read changes** made manually via GUI or CLI and help you commit them back to your configuration, preventing drift and making it the single source of truth.
 
-- **Extensible by Design:** A robust plugin system is fundamental, allowing the community to add support for any application or aspect of the system.
+- **Extensible by Design**: A robust plugin system is fundamental, allowing the community to add support for any application or aspect of the system.
 
-- **Ergonomics First:** The configuration language and CLI should be intuitive for developers, with great IDE support and clear feedback.
+- **Ergonomics First**: The configuration language and CLI should be intuitive for developers, with great IDE support and clear feedback.
 
 ## Core Concepts & Terminology
 
 Understanding these terms is key to the Dotfilet architecture.
 
-- **Plugin:** A self-contained module responsible for managing a single application (e.g., vscode, macos-dock, git). Each plugin knows how to read, write, and validate the configuration for its target.
+- **Plugin**: A self-contained module responsible for managing a single application (e.g., vscode, macos-dock, git). Each plugin knows how to read, write, and validate the configuration for its target.
 
-- **Configuration:** The compiled configuration (e.g. for all plugins) that a user wants to deploy to their machine. Commonly expressed via a collection of [CUE](https://cuelang.org/) files.
+- **Configuration**: The compiled configuration (e.g. for all plugins) that a user wants to deploy to their machine. Commonly expressed via a collection of [CUE](https://cuelang.org/) files.
 
-- **Variable/Secret:** A value that can be injected into the configuration from an external source (e.g., user prompt, an environment variable, a 1Password value).
+- **Variable/Secret**: A value that can be injected into the configuration from an external source (e.g., user prompt, an environment variable, a 1Password value).
 
-- **Host:** A machine that configuration is deployed on. Each host is given a name that the user can refer to (e.g. for overriding configuration).
+- **Host**: A machine that configuration is deployed on. Each host is given a name that the user can refer to (e.g. for overriding configuration).
 
 ## User Experience (UX) & Configuration
 
@@ -150,28 +150,50 @@ Dotfilet injects a few values into the CUE configuration for your convenience:
 
 Misc decisions / thoughts:
 
-- CUE CLI & Agent:
+- **CUE CLI & Agent**:
+
   - Operates on directories/repositories of .cue files
+
     - Injects CUE schemata for validation
+
     - Injects variables (e.g. $host) for contextual config
-- Plugins:
+
+- **Plugins**:
+
   - Are external processes that communicate with Dotfilet via JSON-RPC
+
   - Are responsible with subsets of overall configuration
+
     - Expose configuration schema (as CUE schemata) for validation
+
   - Typically translate system/app config using a deterministic approach (e.g. camelCasing keys, etc)
+
     - and support _unknown_ config values (e.g. introduced during an app update, but before the plugin has been updated to be aware of it)
-- Variables are context
+
+- **Variables are context**:
+
   - $host, etc
+
   - Should be persisted if we prompt the user for them (e.g. when not derived from environment)
-- Secrets:
+
+- **Secrets**:
+
   - Must be represented via some special string tokens `<<1pass:secret_id>>`(?) that gets interpolated.
+
   - Secrets mean there is some sense of dependency resolution required (e.g. cannot sync configuration that relies on vars/secrets until they are present on the system. E.g. cannot use 1password secrets until 1Password is installed / configured)
+
   - We need some way to wait for the user to configure/unlock these tools
+
   - Plugins need some way to provide secrets (and other variables?)
+
   - Are secrets just specially managed variables?
-- Configuration writeback
+
+- **Configuration writeback**:
+
   - Convention over configuration
+
     - Rely on a standard .cue file structure to write back to that by default
+
     - If the convention can't be followed, have some failsafe ("overrides.cue" or something?)
 
 ### State Management
@@ -181,31 +203,37 @@ Dotfilet operates on a simple principle: the configuration describes **desired s
 #### State Discovery & Diffing
 
 - **Plugin Responsibility**: Each plugin is responsible for reading the current state of the system it manages (e.g., reading plist files, querying APIs, parsing config files).
+
 - **No Caching**: Since `dotfilet apply` operations are expected to be slow and infrequent, plugins should read fresh state on each operation rather than maintaining caches.
+
 - **Core Diffing**: Dotfilet core compares the desired configuration against the actual state returned by plugins, computing the minimal set of changes needed.
+
 - **Idempotency**: The core ensures that applying the same configuration multiple times produces the same result, minimizing unnecessary writes to the system.
 
 #### Configuration Application
 
 - **Plugin Write Operations**: Plugins handle writing configuration changes and any required side effects (e.g., restarting the macOS Dock after modifying dock preferences).
+
 - **Change Minimization**: Dotfilet core only asks plugins to apply changes that represent actual differences between desired and actual state.
+
 - **Error Handling**: Partial failures in one plugin should not prevent other plugins from applying their configurations.
 
 #### Variable Resolution
 
-Variables like `$host` are kept intentionally simple:
-
 - **User-Defined**: Users can define arbitrary variables in their configuration.
+
 - **Prompt When Missing**: If a variable is referenced but not defined, Dotfilet prompts the user for the value.
+
 - **No Persistence**: Variable values are resolved at runtime; no complex variable storage or scoping mechanisms.
 
 #### Agent State Monitoring
 
-The sync agent manages ongoing state observation:
-
 - **Boot State Read**: On startup, the agent reads complete state from all plugins to establish a baseline.
+
 - **Periodic Refresh**: The agent periodically re-reads complete state to catch changes made by external tools.
+
 - **Event-Based Updates**: Plugins can subscribe to file system changes or other events to detect state changes in real-time.
+
 - **Change Notifications**: When changes are detected, the agent emits updates via JSON-RPC (typically WebSocket-based) to notify of configuration drift.
 
 This approach keeps the system simple while enabling robust bidirectional synchronization between configuration files and system state.
@@ -216,7 +244,10 @@ See [Plugin Protocol](./Plugin Protocol.md) for the complete specification of ho
 
 ### Open Questions
 
-- Managed applications
+- **Managed applications**:
+
   - Should be able to manage application installation via homebrew
+
   - ^ If someone removes a managed application from the configuration, we should uninstall it
+
   - Leave room to support other package managers (nix, etc)

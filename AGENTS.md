@@ -13,13 +13,13 @@
 
 ## Behaviors
 
-- After editing a file, ALWAYS run `mise fix-style FILE` to auto-format it.
+- After editing a file, ALWAYS run `mise run fix-style FILE` to auto-format it.
 
 ## Helpful Tasks
 
-- To view the merged output of an example: `mise example-config EXAMPLE-DIR-NAME`.
+- To view the merged output of an example: `mise run example-config EXAMPLE-DIR-NAME`.
 
-  Example: `mise example-config multi-host`
+  Example: `mise run example-config multi-host`
 
 ## Style
 

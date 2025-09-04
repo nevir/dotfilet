@@ -217,12 +217,17 @@ Asks the server to perform file system watching on specific paths.
 
 ## Plugin Lifecycle
 
-1. **Discovery**: Dotfilet discovers plugins via configuration or plugin registry
-2. **Launch**: Plugin process is started
-3. **Handshake**: Initial connection and capability negotiation
-4. **Configuration**: Plugin describes its supported configuration schema
-5. **Operation**: Normal read/write operations and change monitoring
-6. **Shutdown**: Graceful termination
+- **Discovery**: Dotfilet discovers plugins via configuration or plugin registry
+
+- **Launch**: Plugin process is started
+
+- **Handshake**: Initial connection and capability negotiation
+
+- **Configuration**: Plugin describes its supported configuration schema
+
+- **Operation**: Normal read/write operations and change monitoring
+
+- **Shutdown**: Graceful termination
 
 ## Error Handling
 
@@ -245,13 +250,19 @@ Standard JSON-RPC error responses should be used:
 ## Security Considerations
 
 - Plugins should run in isolated processes
+
 - File system access should be limited to declared paths
+
 - Network access should be restricted as needed
+
 - Configuration changes should be validated before application
 
 ## Future Considerations
 
 - Plugin versioning and compatibility
+
 - Bulk operations for performance
+
 - Streaming for large configuration sets
+
 - Plugin authentication and authorization

@@ -9,6 +9,7 @@
     "**/*.lock": true,
     "dprint.json": true,
     "AGENTS.md": true,
+    "CLAUDE.md": true,
   },
 
   // Environment
