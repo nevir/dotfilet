@@ -172,46 +172,47 @@ Misc decisions / thoughts:
 - Configuration writeback
   - Convention over configuration
     - Rely on a standard .cue file structure to write back to that by default
-    - If the convention can’t be followed, have some failsafe (“overrides.cue” or something?)
+    - If the convention can't be followed, have some failsafe ("overrides.cue" or something?)
 
-## Protocols
+### State Management
 
-### Plugin JSON-RPC Protocol
+Dotfilet operates on a simple principle: the configuration describes **desired state**, while **actual state** is managed directly by the platform or programs being configured. There is no intermediate state database. Plugins read from and write to the authoritative sources directly.
 
-[Details to be added from #12](https://github.com/nevir/dotfilet/issues/12)
+#### State Discovery & Diffing
 
-Misc:
+- **Plugin Responsibility**: Each plugin is responsible for reading the current state of the system it manages (e.g., reading plist files, querying APIs, parsing config files).
+- **No Caching**: Since `dotfilet apply` operations are expected to be slow and infrequent, plugins should read fresh state on each operation rather than maintaining caches.
+- **Core Diffing**: Dotfilet core compares the desired configuration against the actual state returned by plugins, computing the minimal set of changes needed.
+- **Idempotency**: The core ensures that applying the same configuration multiple times produces the same result, minimizing unnecessary writes to the system.
 
-- Document similarly to the [LSP](https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/)
-- Only websocket? Support both websocket + synchronous?
+#### Configuration Application
 
-Methods (names TBD):
+- **Plugin Write Operations**: Plugins handle writing configuration changes and any required side effects (e.g., restarting the macOS Dock after modifying dock preferences).
+- **Change Minimization**: Dotfilet core only asks plugins to apply changes that represent actual differences between desired and actual state.
+- **Error Handling**: Partial failures in one plugin should not prevent other plugins from applying their configurations.
 
-- Server -> Plugin:
-  - `describeConfig`: Reports all known supported configuration values and their ranges (as JSON schema? CUE schemata?)
-  - `getConfig`: Retrieves the current (remote) configuration; possibly with a narrowed set of config values
-  - `applyConfig`: Idempotently applies the requested configuration.
-  - `subscribeToRemoteChanges`: Requests that the plugin watch for changes and report them back via `remoteChanges` messages.
-  - `fileSystemChanges`: Reports any files that have changed and the matching expression(s) that were subscribed to.
-- Plugin -> Server:
-  - `remoteChanges`: Sends any configuration values that were changed out of band.
-  - `subscribeToFilesystem`: Asks the server to perform file system watching on specific paths
+#### Variable Resolution
 
-## Security
+Variables like `$host` are kept intentionally simple:
 
-### Security Model
+- **User-Defined**: Users can define arbitrary variables in their configuration.
+- **Prompt When Missing**: If a variable is referenced but not defined, Dotfilet prompts the user for the value.
+- **No Persistence**: Variable values are resolved at runtime; no complex variable storage or scoping mechanisms.
 
-[Details to be added from #14](https://github.com/nevir/dotfilet/issues/14)
+#### Agent State Monitoring
 
-## Error Handling & Reporting
+The sync agent manages ongoing state observation:
 
-[Details to be added from #11](https://github.com/nevir/dotfilet/issues/11)
+- **Boot State Read**: On startup, the agent reads complete state from all plugins to establish a baseline.
+- **Periodic Refresh**: The agent periodically re-reads complete state to catch changes made by external tools.
+- **Event-Based Updates**: Plugins can subscribe to file system changes or other events to detect state changes in real-time.
+- **Change Notifications**: When changes are detected, the agent emits updates via JSON-RPC (typically WebSocket-based) to notify of configuration drift.
+
+This approach keeps the system simple while enabling robust bidirectional synchronization between configuration files and system state.
+
+See [Plugin Protocol](./Plugin Protocol.md) for the complete specification of how plugins communicate with the Dotfilet core system.
 
 ## Appendix
-
-### Plugin Prototype Ideas
-
-[Details to be added from #13](https://github.com/nevir/dotfilet/issues/13)
 
 ### Open Questions
 

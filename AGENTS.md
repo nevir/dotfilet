@@ -20,3 +20,25 @@
 - To view the merged output of an example: `mise example-config EXAMPLE-DIR-NAME`.
 
   Example: `mise example-config multi-host`
+
+## Style
+
+### Markdown Style
+
+- Write lists using the `-` character.
+
+- Leave a newline between each list item, unless the list is enumerating short items (names, etc).
+
+- **Labeled Lists**: When list items begin with a label, **bold** the text, but leave the `:` outside of the label.
+
+- Use markdown alerts for "asides" and other secondary information. There must always be a blank `>` line between the alert type and body
+
+  > [!NOTE]
+  >
+  > Supported alert types:
+  >
+  > - NOTE
+  > - TIP
+  > - IMPORTANT
+  > - WARNING
+  > - CAUTION
