@@ -1,4 +1,5 @@
 use clap::Parser;
+use crate::styles::get_custom_styles;
 
 #[derive(Parser)]
 #[command(about = "Stop the sync agent")]
@@ -7,7 +8,7 @@ use clap::Parser;
 monitoring and configuration file updates. Manual changes to your system will
 no longer be detected and written back to configuration files."
 )]
-#[command(after_help = "EXAMPLES:
+#[command(after_help = "Examples:
     dotfilet agent stop              Stop the agent daemon
     
 After stopping the agent:
@@ -15,6 +16,7 @@ After stopping the agent:
     • Manual system changes won't be detected  
     • Configuration files won't be auto-updated
     • You can still run dotfilet apply manually")]
+#[command(styles = get_custom_styles())]
 pub struct StopCommand;
 
 impl StopCommand {

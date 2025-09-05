@@ -1,4 +1,5 @@
 use clap::Parser;
+use crate::styles::get_custom_styles;
 
 #[derive(Parser)]
 #[command(about = "Configure the sync agent to use current configuration")]
@@ -7,13 +8,14 @@ use clap::Parser;
 directory. This tells the agent which configuration files to monitor and update
 when it detects system changes."
 )]
-#[command(after_help = "EXAMPLES:
+#[command(after_help = "Examples:
     dotfilet agent associate          Associate with current directory
     
 This command configures the agent to:
     • Monitor system state changes
     • Update configuration files in this directory
     • Respect the conventional directory structure")]
+#[command(styles = get_custom_styles())]
 pub struct AssociateCommand;
 
 impl AssociateCommand {

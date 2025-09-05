@@ -4,5 +4,6 @@
     "amodio.toggle-excluded-files",
     "tamasfe.even-better-toml",
     "kejun.markdown-alert",
+    "rust-lang.rust-analyzer",
   ],
 }

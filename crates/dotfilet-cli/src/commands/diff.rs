@@ -1,4 +1,5 @@
 use clap::Parser;
+use crate::styles::get_custom_styles;
 
 #[derive(Parser)]
 #[command(about = "Display pending configuration changes")]
@@ -7,17 +8,18 @@ use clap::Parser;
 and display what changes would be applied. This is effectively a 'dry-run' mode
 that shows you exactly what Dotfilet would do without making any changes."
 )]
-#[command(after_help = "EXAMPLES:
+#[command(after_help = "Examples:
     dotfilet diff                     Show all pending changes
     dotfilet diff programs.vscode     Show only VS Code changes
     dotfilet diff macos.dock          Show only Dock configuration changes
     dotfilet diff programs.vscode programs.chrome   Show changes for multiple programs
     
-RESOURCE EXAMPLES:
+Resource Examples:
     programs.vscode                   Specific application
     programs.vscode.settings          Application subsection
     macos.dock                        System component
     macos.dock.autohide              Specific setting")]
+#[command(styles = get_custom_styles())]
 pub struct DiffCommand {
     #[arg(help = "Specific resources to check for changes (e.g., programs.vscode, macos.dock)")]
     pub resources: Vec<String>,

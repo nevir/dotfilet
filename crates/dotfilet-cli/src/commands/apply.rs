@@ -1,4 +1,5 @@
 use clap::Parser;
+use crate::styles::get_custom_styles;
 
 #[derive(Parser)]
 #[command(about = "Apply configuration changes to the system")]
@@ -7,16 +8,17 @@ use clap::Parser;
 necessary changes to bring the system state in line with your declared configuration.
 This automatically starts the sync agent after successful application."
 )]
-#[command(after_help = "EXAMPLES:
+#[command(after_help = "Examples:
     dotfilet apply                    Apply all configuration changes
     dotfilet apply programs.vscode    Apply only VS Code configuration
     dotfilet apply --plan changes.json   Apply changes from a plan file
     dotfilet apply macos.dock programs.chrome   Apply multiple specific resources
     
-WORKFLOW:
+Workflow:
     1. dotfilet diff                  Preview changes first
     2. dotfilet apply                 Apply the changes
     3. Agent starts automatically     Background sync begins")]
+#[command(styles = get_custom_styles())]
 pub struct ApplyCommand {
     #[arg(help = "Specific resources to apply (e.g., programs.vscode, macos.dock)")]
     pub resources: Vec<String>,

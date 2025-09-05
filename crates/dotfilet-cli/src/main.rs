@@ -1,4 +1,5 @@
 mod commands;
+mod styles;
 
 use clap::Parser;
 use commands::Commands;
@@ -12,7 +13,7 @@ sharing, and reliable reproduction across multiple machines. It provides bi-dire
 sync between your system state and configuration files, preventing configuration drift."
 )]
 #[command(version)]
-#[command(after_help = "EXAMPLES:
+#[command(after_help = "Examples:
     dotfilet init                     Initialize a new Dotfilet repository
     dotfilet diff                     Show all pending configuration changes
     dotfilet diff programs.vscode     Show changes for VS Code only
@@ -21,6 +22,7 @@ sync between your system state and configuration files, preventing configuration
     dotfilet agent start              Start the background sync agent
 
 For more information about a specific command, run: dotfilet <COMMAND> --help")]
+#[command(styles = styles::get_custom_styles())]
 struct Cli {
     #[command(flatten)]
     global: GlobalArgs,

@@ -1,4 +1,5 @@
 use clap::Parser;
+use crate::styles::get_custom_styles;
 
 #[derive(Parser)]
 #[command(about = "Start the sync agent")]
@@ -7,7 +8,7 @@ use clap::Parser;
 configuration changes. The agent will automatically detect when you make changes
 through system preferences or application settings and update your configuration files."
 )]
-#[command(after_help = "EXAMPLES:
+#[command(after_help = "Examples:
     dotfilet agent start             Start the agent daemon
     
 The agent monitors:
@@ -16,6 +17,7 @@ The agent monitors:
     • File system changes in monitored locations
     
 Changes are automatically written back to your .cue configuration files.")]
+#[command(styles = get_custom_styles())]
 pub struct StartCommand;
 
 impl StartCommand {

@@ -1,4 +1,5 @@
 use clap::Parser;
+use crate::styles::get_custom_styles;
 
 #[derive(Parser)]
 #[command(about = "Scaffold a new Dotfilet repository")]
@@ -7,7 +8,7 @@ use clap::Parser;
 configuration files and conventional directory structure. This sets up everything
 you need to start managing your system configuration declaratively."
 )]
-#[command(after_help = "EXAMPLES:
+#[command(after_help = "Examples:
     dotfilet init                     Initialize repository in current directory
     
 This command creates:
@@ -16,6 +17,7 @@ This command creates:
     • programs/       - Application-specific configuration
     • variables.cue   - Configuration variables
     • .dotfilet/      - Local metadata directory")]
+#[command(styles = get_custom_styles())]
 pub struct InitCommand;
 
 impl InitCommand {
