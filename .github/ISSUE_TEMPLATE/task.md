@@ -20,6 +20,14 @@ A clear and concise description of what the feature is. Every issue's body shoul
 
 - Things that we should explicitly NOT do as part of this work.
 
+## Acceptance Criteria
+
+- [ ] Measurable, testable outcomes that define when this work is complete
+- [ ] Specific behaviors and functionality that must work
+- [ ] Quality standards and performance requirements
+- [ ] Integration and compatibility requirements
+- [ ] …
+
 ## Technical Notes
 
 - Implementation approach and strategy
