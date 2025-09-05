@@ -15,5 +15,17 @@ name = "dotfilet-core"
 version = "0.1.0"
 
 [[package]]
+name = "dotfilet-plugin-google-chrome"
+version = "0.1.0"
+
+[[package]]
+name = "dotfilet-plugin-macos-defaults"
+version = "0.1.0"
+
+[[package]]
+name = "dotfilet-plugin-macos-dock"
+version = "0.1.0"
+
+[[package]]
 name = "dotfilet-rpc"
 version = "0.1.0"

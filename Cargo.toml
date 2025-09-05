@@ -2,12 +2,12 @@
 resolver = "2"
 members = [
   "crates/dotfilet-agent",
-  "crates/dotfilet-cli",
+  "crates/dotfilet-cli", 
   "crates/dotfilet-core",
   "crates/dotfilet-rpc",
-]
-exclude = [
-  "plugins/*",
+  "plugins/macos/dock",
+  "plugins/macos/defaults",
+  "plugins/programs/google-chrome",
 ]
 
 [workspace.package]
