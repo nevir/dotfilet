@@ -1,13 +1,8 @@
 [workspace]
 resolver = "2"
 members = [
-  "crates/dotfilet-agent",
-  "crates/dotfilet-cli",
-  "crates/dotfilet-core",
-  "crates/dotfilet-rpc",
-  "plugins/macos/defaults",
-  "plugins/macos/dock",
-  "plugins/programs/google-chrome",
+  "crates/*",
+  "plugins/*/*",
 ]
 
 [workspace.package]
