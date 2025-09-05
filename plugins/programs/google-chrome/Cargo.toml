@@ -1,0 +1,15 @@
+[workspace]
+
+[package]
+name = "dotfilet-plugin-google-chrome"
+version = "0.1.0"
+edition = "2021"
+authors = ["Ian MacLeod <ian@nevir.net>"]
+license = "MIT"
+description = "Google Chrome plugin for dotfilet"
+
+[[bin]]
+name = "dotfilet-plugin-google-chrome"
+path = "src/main.rs"
+
+[dependencies]

@@ -1,0 +1,15 @@
+[workspace]
+
+[package]
+name = "dotfilet-plugin-macos-defaults"
+version = "0.1.0"
+edition = "2021"
+authors = ["Ian MacLeod <ian@nevir.net>"]
+license = "MIT"
+description = "macOS defaults plugin for dotfilet"
+
+[[bin]]
+name = "dotfilet-plugin-macos-defaults"
+path = "src/main.rs"
+
+[dependencies]

@@ -1,0 +1,22 @@
+[workspace]
+resolver = "2"
+members = [
+  "crates/dotfilet-agent",
+  "crates/dotfilet-cli",
+  "crates/dotfilet-core",
+  "crates/dotfilet-rpc",
+]
+exclude = [
+  "plugins/*",
+]
+
+[workspace.package]
+version = "0.1.0"
+authors = ["Ian MacLeod <ian@nevir.net>"]
+edition = "2021"
+homepage = "https://github.com/nevir/dotfilet"
+license = "MIT"
+repository = "https://github.com/nevir/dotfilet"
+
+[workspace.dependencies]
+# Shared dependencies will be managed here

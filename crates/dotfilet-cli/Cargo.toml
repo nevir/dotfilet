@@ -1,0 +1,15 @@
+[package]
+name = "dotfilet-cli"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+description = "Main CLI binary for dotfilet"
+
+[[bin]]
+name = "dotfilet"
+path = "src/main.rs"
+
+[dependencies]

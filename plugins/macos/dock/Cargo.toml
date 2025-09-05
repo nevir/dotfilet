@@ -1,0 +1,15 @@
+[workspace]
+
+[package]
+name = "dotfilet-plugin-macos-dock"
+version = "0.1.0"
+edition = "2021"
+authors = ["Ian MacLeod <ian@nevir.net>"]
+license = "MIT"
+description = "macOS Dock plugin for dotfilet"
+
+[[bin]]
+name = "dotfilet-plugin-macos-dock"
+path = "src/main.rs"
+
+[dependencies]
