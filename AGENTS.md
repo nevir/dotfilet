@@ -1,11 +1,5 @@
 # AI Agent Context
 
-> [!IMPORTANT]
->
-> **CRITICAL: NO FILE SYSTEM MODIFICATIONS BEFORE BRANCHING**
->
-> You MUST create a feature branch BEFORE making any changes to files, creating directories, or modifying the file system in any way. Read the [Development Workflow](#development-workflow) below and follow it exactly.
-
 ## Development Workflow
 
 > [!WARNING]
@@ -17,6 +11,9 @@
 1. **📖 Read & Understand**: Thoroughly review the GitHub issue and all comments first.
 
    - If it's a sub-issue, review the parent issue and related sub-tasks.
+   - Formulate an initial to-do list of the steps you think you need to accomplish the task.
+     - If you have a built-in task tracking tool, use that.
+     - Otherwise, write your to-do list to a file
    - **NO file system modifications during this step.**
 
 2. **🌿 Create Branch**: Create a new feature branch BEFORE any file changes.
@@ -28,21 +25,24 @@
    - Use kebab-case names with prefixes: `feat/`, `fix/`, `refactor/`, etc.
    - **This MUST happen before creating files, directories, or editing _anything_.**
 
-3. **⚡ Implementation**: Only now perform code modifications, file creation, etc.
+3. **📋 Initial To-Do List**: Formulate an initial to-do list of the steps you think you need to accomplish the task.
 
-   - Group related changes into logical commits.
+   - If you have a built-in task tracking tool, use that.
+   - Otherwise, write your to-do list to a [scratch file](.scratch/) `.scratch/descriptive-name.md`.
+
+4. **⚡ Implementation**: Only now perform code modifications, file creation, etc.
+
+   - Refer to your to-do list frequently to figure out your next step(s).
+     - Update the to-do list as you complete tasks and/or learn new things.
    - Follow existing code conventions and style.
+   - **Commit your changes as you go**:
+     - Group related changes into logical commits.
+     - Use descriptive commit messages that explain the "why" not just the "what".
 
-4. **✅ Verification**: Test and lint before concluding work.
+5. **✅ Verification**: Test and lint before concluding work.
 
    - Run tests and linters to ensure quality.
    - Verify all issue requirements are met.
-
-5. **📦 Commit Changes**: Commit your changes with clear, descriptive messages.
-
-   - Group related changes into logical commits.
-   - Use descriptive commit messages that explain the "why" not just the "what".
-   - Follow the existing project's commit message style.
 
 6. **🚀 Create Pull Request**: Push your branch and create a pull request.
 
@@ -53,7 +53,6 @@
 
    - Include a clear title and detailed description.
    - Reference the GitHub issue being addressed.
-   - Provide a test plan or verification steps.
 
 ## Overview
 
