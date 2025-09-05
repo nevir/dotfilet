@@ -10,6 +10,7 @@
     "dprint.json": true,
     "AGENTS.md": true,
     "CLAUDE.md": true,
+    "LICENSE.md": true,
   },
 
   // Environment

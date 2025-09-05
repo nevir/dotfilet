@@ -1,14 +1,14 @@
-# Rust build artifacts
+# Rust
 target/
 
-# IDE files
+# IDEs
 .vscode/
 .idea/
 
 # macOS
 .DS_Store
 
-# Temporary files
+# Temporary
 *.tmp
 *.swp
 *.swo
