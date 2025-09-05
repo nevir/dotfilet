@@ -11,17 +11,22 @@ A clear and concise description of what the feature is. Every issue's body shoul
 
 ## Requirements
 
-- [ ] Requirement 1
-- [ ] Requirement 2
-- [ ] Requirement 3
+- Build and compilation requirements
+- User interface and CLI behavior
+- Error handling and user experience
+- …
 
-### Out of Scope
+## Out of Scope
 
-- Things that we should expliclit NOT do as part of this work.
+- Things that we should explicitly NOT do as part of this work.
 
-## Initial Proposal
+## Technical Notes
 
-A clear and concise description of a potential implementation.
+- Implementation approach and strategy
+- User experience / developer ergonomics
+- Integration considerations
+- Performance considerations
+- …
 
 ## Alternatives Considered
 
