@@ -11,7 +11,7 @@ pub struct ApplyCommand {
 }
 
 impl ApplyCommand {
-    pub fn execute(self, _verbose: bool, _dry_run: bool) {
+    pub fn execute(self) {
         match (self.resources.is_empty(), self.plan) {
             (true, None) => {
                 println!("dotfilet apply: Not yet implemented");

@@ -14,12 +14,12 @@ pub enum Commands {
 }
 
 impl Commands {
-    pub fn execute(self, verbose: bool, dry_run: bool) {
+    pub fn execute(self) {
         match self {
-            Commands::Init(cmd) => cmd.execute(verbose, dry_run),
-            Commands::Diff(cmd) => cmd.execute(verbose, dry_run),
-            Commands::Apply(cmd) => cmd.execute(verbose, dry_run),
-            Commands::Agent(cmd) => cmd.execute(verbose, dry_run),
+            Commands::Init(cmd) => cmd.execute(),
+            Commands::Diff(cmd) => cmd.execute(),
+            Commands::Apply(cmd) => cmd.execute(),
+            Commands::Agent(cmd) => cmd.execute(),
         }
     }
 }

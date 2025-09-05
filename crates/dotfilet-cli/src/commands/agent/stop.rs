@@ -5,7 +5,7 @@ use clap::Parser;
 pub struct StopCommand;
 
 impl StopCommand {
-    pub fn execute(self, _verbose: bool, _dry_run: bool) {
+    pub fn execute(self) {
         println!("dotfilet agent stop: Not yet implemented");
         println!("This command will stop the sync agent daemon");
     }

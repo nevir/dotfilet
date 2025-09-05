@@ -5,7 +5,7 @@ use clap::Parser;
 pub struct AssociateCommand;
 
 impl AssociateCommand {
-    pub fn execute(self, _verbose: bool, _dry_run: bool) {
+    pub fn execute(self) {
         println!("dotfilet agent associate: Not yet implemented");
         println!("This command will configure the sync agent for the current directory");
     }

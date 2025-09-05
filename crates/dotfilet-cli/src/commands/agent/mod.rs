@@ -19,17 +19,11 @@ pub enum AgentCommands {
 }
 
 impl AgentCommand {
-    pub fn execute(self, verbose: bool, dry_run: bool) {
-        self.command.execute(verbose, dry_run);
-    }
-}
-
-impl AgentCommands {
-    pub fn execute(self, verbose: bool, dry_run: bool) {
-        match self {
-            AgentCommands::Associate(cmd) => cmd.execute(verbose, dry_run),
-            AgentCommands::Start(cmd) => cmd.execute(verbose, dry_run),
-            AgentCommands::Stop(cmd) => cmd.execute(verbose, dry_run),
+    pub fn execute(self) {
+        match self.command {
+            AgentCommands::Associate(cmd) => cmd.execute(),
+            AgentCommands::Start(cmd) => cmd.execute(),
+            AgentCommands::Stop(cmd) => cmd.execute(),
         }
     }
 }

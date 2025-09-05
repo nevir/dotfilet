@@ -19,9 +19,6 @@ struct Cli {
 struct GlobalArgs {
     #[arg(long, global = true, help = "Enable verbose output")]
     verbose: bool,
-
-    #[arg(long, global = true, help = "Perform a dry run without making changes")]
-    dry_run: bool,
 }
 
 fn main() {
@@ -31,9 +28,5 @@ fn main() {
         eprintln!("Verbose mode enabled");
     }
 
-    if cli.global.dry_run {
-        eprintln!("Dry run mode enabled - no changes will be made");
-    }
-
-    cli.command.execute(cli.global.verbose, cli.global.dry_run);
+    cli.command.execute();
 }

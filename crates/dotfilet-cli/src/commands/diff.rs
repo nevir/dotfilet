@@ -8,7 +8,7 @@ pub struct DiffCommand {
 }
 
 impl DiffCommand {
-    pub fn execute(self, _verbose: bool, _dry_run: bool) {
+    pub fn execute(self) {
         if self.resources.is_empty() {
             println!("dotfilet diff: Not yet implemented");
             println!("This command will show all pending configuration changes");
