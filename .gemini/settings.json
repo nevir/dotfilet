@@ -1,3 +1,8 @@
 {
-  "contextFileName": ["AGENTS.md", "GEMINI.md"]
+  "contextFileName": ["AGENTS.md", "GEMINI.md"],
+  "tools": {
+    "allowed": [
+      "run_shell_command(mise)"
+    ]
+  }
 }
