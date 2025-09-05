@@ -1,5 +1,44 @@
 # AI Agent Context
 
+> [!IMPORTANT]
+>
+> **CRITICAL: NO FILE SYSTEM MODIFICATIONS BEFORE BRANCHING**
+>
+> You MUST create a feature branch BEFORE making any changes to files, creating directories, or modifying the file system in any way. Read the [Development Workflow](#development-workflow) below and follow it exactly.
+
+## Development Workflow
+
+> [!WARNING]
+>
+> This workflow MUST be followed for every task. Failure to follow this workflow, especially creating a branch before making changes, will result in rejected modifications.
+
+### MANDATORY Steps (In Order):
+
+1. **📖 Read & Understand**: Thoroughly review the GitHub issue and all comments first.
+
+   - If it's a sub-issue, review the parent issue and related sub-tasks.
+   - **NO file system modifications during this step.**
+
+2. **🌿 Create Branch**: Create a new feature branch BEFORE any file changes.
+
+   ```bash
+   git checkout -b feat/descriptive-name
+   ```
+
+   - Use kebab-case names with prefixes: `feat/`, `fix/`, `refactor/`, etc.
+   - **This MUST happen before creating files, directories, or editing _anything_.**
+
+3. **⚡ Implementation**: Only now perform code modifications, file creation, etc.
+
+   - Group related changes into logical commits.
+   - Follow existing code conventions and style.
+
+4. **✅ Verification**: Test and lint before concluding work.
+
+   - Run tests and linters to ensure quality.
+   - Verify all issue requirements are met.
+   - Create pull request when ready for review.
+
 ## Overview
 
 This project, `dotfilet`, is a declarative configuration management tool for developer environments, initially targeting macOS. It treats your machine's configuration as code, enabling versioning, sharing, and reliable reproduction.
@@ -30,11 +69,7 @@ As you work, you will learn new things about the codebase, the tools, and the pr
 
 Think of this as contributing to the collective knowledge of the team. Your updates will help all future agents get up to speed faster and avoid common pitfalls.
 
-## Workflow
-
-This section describes the preferred workflow for contributing to this project.
-
-### Issue Tracking
+## Issue Tracking
 
 - **Tracked in GitHub**: All work is tracked via GitHub Issues.
   - Use sub-issues to break down larger pieces of work.
@@ -42,24 +77,6 @@ This section describes the preferred workflow for contributing to this project.
 - **Issue Templates**: Use an appropriate [issue template]((.github/ISSUE_TEMPLATE) (such as the [task template](.github/ISSUE_TEMPLATE/task.md)) to ensure all necessary information is included.
 
 - **Collaboration**: Use issue comments for notes, ideas, and discussing progress.
-
-### Development
-
-- **Understand the Task**: Before you begin, thoroughly review the issue and all of its comments.
-  - If it is a sub-issue, review the parent issue and its other sub-tasks to ensure your work is correctly scoped and aligned with the overall goal.
-
-- **Branching**: All work should be done within a feature branch.
-  - **Branch Naming**: Use a descriptive, kebab-case name prefixed with `feat/`. For example: `feat/1pass-secrets`.
-
-- **Commits**: Group related changes into logical commits. This repository uses a merge commit strategy, so individual commits within a branch are important.
-
-- **Pull Requests**: When a feature is ready for review, push the branch and open a pull request.
-
-- **Dependent Changes**: For tasks that depend on each other (e.g., an issue with multiple sub-issues), create a chain of branches.
-  - Each branch should be based on the previous one.
-  - The pull requests should also reflect this dependency chain (e.g., PR for `feat/b` targets `feat/a`).
-
-- **Verification**: Before concluding your work on a task, double-check your changes against the issue's requirements and goals. Ensure you have fully addressed the task.
 
 ## Toolchain
 

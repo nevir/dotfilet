@@ -2,6 +2,7 @@
   "contextFileName": ["AGENTS.md", "GEMINI.md"],
   "tools": {
     "allowed": [
+      "run_shell_command(git)",
       "run_shell_command(mise)"
     ]
   }
