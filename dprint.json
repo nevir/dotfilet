@@ -1,9 +1,4 @@
 {
-  "includes": ["**/*.{json,md,toml,cue,yml,yaml}"],
-  "excludes": [
-    "**/node_modules",
-    "**/*-lock.json"
-  ],
   "json": {
     "jsonTrailingCommaFiles": [
       ".vscode/extensions.json",
@@ -16,6 +11,10 @@
       {
         "exts": ["cue"],
         "command": "cue fmt -"
+      },
+      {
+        "exts": ["rs"],
+        "command": "rustfmt"
       }
     ]
   },

@@ -1,0 +1,22 @@
+[workspace]
+resolver = "2"
+members = [
+  "crates/dotfilet-agent",
+  "crates/dotfilet-cli",
+  "crates/dotfilet-core",
+  "crates/dotfilet-rpc",
+  "plugins/macos/defaults",
+  "plugins/macos/dock",
+  "plugins/programs/google-chrome",
+]
+
+[workspace.package]
+version = "0.1.0"
+authors = ["Ian MacLeod <ian@nevir.net>"]
+edition = "2021"
+homepage = "https://github.com/nevir/dotfilet"
+license = "BlueOak-1.0.0"
+repository = "https://github.com/nevir/dotfilet"
+
+[workspace.dependencies]
+# Shared dependencies will be managed here

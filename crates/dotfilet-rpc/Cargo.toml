@@ -1,0 +1,15 @@
+[package]
+name = "dotfilet-rpc"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+homepage.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "JSON-RPC client library for dotfilet plugins"
+
+[lib]
+name = "dotfilet_rpc"
+path = "src/lib.rs"
+
+[dependencies]
