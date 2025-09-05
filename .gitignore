@@ -1,7 +1,5 @@
 # Rust build artifacts
-/target/
-**/target/
-Cargo.lock
+target/
 
 # Plugin build artifacts
 plugins/**/target/
