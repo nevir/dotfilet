@@ -1,0 +1,21 @@
+# Rust build artifacts
+/target/
+**/target/
+Cargo.lock
+
+# Plugin build artifacts
+plugins/**/target/
+plugins/**/Cargo.lock
+
+# IDE files
+.vscode/
+.idea/
+
+# macOS
+.DS_Store
+
+# Temporary files
+*.tmp
+*.swp
+*.swo
+*~
