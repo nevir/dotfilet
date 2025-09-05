@@ -1,11 +1,11 @@
 [package]
 name = "dotfilet-plugin-macos-defaults"
 version.workspace = true
-edition.workspace = true
 authors.workspace = true
+edition.workspace = true
+homepage.workspace = true
 license.workspace = true
 repository.workspace = true
-homepage.workspace = true
 description = "macOS defaults plugin for dotfilet"
 
 [[bin]]

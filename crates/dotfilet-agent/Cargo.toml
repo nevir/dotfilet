@@ -1,11 +1,11 @@
 [package]
 name = "dotfilet-agent"
 version.workspace = true
-edition.workspace = true
 authors.workspace = true
+edition.workspace = true
+homepage.workspace = true
 license.workspace = true
 repository.workspace = true
-homepage.workspace = true
 description = "Background sync agent for dotfilet"
 
 [[bin]]

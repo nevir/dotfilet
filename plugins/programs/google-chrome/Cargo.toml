@@ -1,11 +1,11 @@
 [package]
 name = "dotfilet-plugin-google-chrome"
 version.workspace = true
-edition.workspace = true
 authors.workspace = true
+edition.workspace = true
+homepage.workspace = true
 license.workspace = true
 repository.workspace = true
-homepage.workspace = true
 description = "Google Chrome plugin for dotfilet"
 
 [[bin]]

@@ -1,11 +1,11 @@
 [package]
 name = "dotfilet-plugin-macos-dock"
 version.workspace = true
-edition.workspace = true
 authors.workspace = true
+edition.workspace = true
+homepage.workspace = true
 license.workspace = true
 repository.workspace = true
-homepage.workspace = true
 description = "macOS Dock plugin for dotfilet"
 
 [[bin]]

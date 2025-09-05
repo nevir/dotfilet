@@ -109,6 +109,8 @@ Think of this as contributing to the collective knowledge of the team. Your upda
 
 - After editing a file, ALWAYS run `mise run fix-style FILE` to auto-format it.
 
+- To format ALL files in the project, run `mise run fix-style` (without additional arguments).
+
 - To view the merged output of an example: `mise run example-config EXAMPLE-DIR-NAME`.
 
   Example: `mise run example-config multi-host`
