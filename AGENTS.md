@@ -37,7 +37,23 @@
 
    - Run tests and linters to ensure quality.
    - Verify all issue requirements are met.
-   - Create pull request when ready for review.
+
+5. **📦 Commit Changes**: Commit your changes with clear, descriptive messages.
+
+   - Group related changes into logical commits.
+   - Use descriptive commit messages that explain the "why" not just the "what".
+   - Follow the existing project's commit message style.
+
+6. **🚀 Create Pull Request**: Push your branch and create a pull request.
+
+   ```bash
+   git push -u origin feat/descriptive-name
+   gh pr create --title "Clear descriptive title" --body "Detailed description"
+   ```
+
+   - Include a clear title and detailed description.
+   - Reference the GitHub issue being addressed.
+   - Provide a test plan or verification steps.
 
 ## Overview
 
