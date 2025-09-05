@@ -5,12 +5,12 @@
   // By default, we only show files that are commonly changed / core to the
   // project. Toogle them via the eye icon in the bottom right of VS Code.
   "files.exclude": {
-    "**/.*": true,
-    "**/*.lock": true,
-    "dprint.json": true,
-    "AGENTS.md": true,
-    "CLAUDE.md": true,
-    "LICENSE.md": true,
+    "**/.*": false,
+    "**/*.lock": false,
+    "dprint.json": false,
+    "AGENTS.md": false,
+    "CLAUDE.md": false,
+    "LICENSE.md": false
   },
 
   // Environment
