@@ -40,7 +40,7 @@ impl Commands {
             Commands::Apply { resources, plan } => {
                 apply::execute(resources, plan, verbose, dry_run)
             }
-            Commands::Agent { command } => agent::execute(command, verbose, dry_run),
+            Commands::Agent { command } => command.execute(verbose, dry_run),
         }
     }
 }
