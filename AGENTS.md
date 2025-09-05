@@ -10,6 +10,7 @@
 
 1. **📖 Read & Understand**: Thoroughly review the GitHub issue and all comments first.
 
+   - Make sure you understand [the high-level design of this project](docs/Design.md).
    - If it's a sub-issue, review the parent issue and related sub-tasks.
    - Formulate an initial to-do list of the steps you think you need to accomplish the task.
      - If you have a built-in task tracking tool, use that.
@@ -68,21 +69,37 @@ Key characteristics:
 
 For a deeper understanding of the project's design, architecture, and concepts, please refer to the documentation in the [`docs`](./docs/) directory.
 
-## Keeping this Document Updated
+## Documentation Maintenance
 
-This document is a living guide for AI agents working on this project. To ensure future agents can work as efficiently and effectively as possible, it is crucial to keep this document current.
+This document and the entire `docs/` directory serve as living guides for AI agents. Keeping documentation current is essential for project success.
 
-As you work, you will learn new things about the codebase, the tools, and the project's conventions. Please help improve this guide by:
+### When to Update Documentation
 
-- **Documenting Tool Quirks**: If you discover a non-obvious behavior or a specific way a tool needs to be used, add it to the relevant section (e.g., `Toolchain`).
+Update documentation whenever you:
 
-- **Capturing Implicit Conventions**: If you notice a recurring style or pattern in the code that isn't explicitly documented, add it to the `Style` section or create a new one.
+- **Discover new patterns or conventions** not yet documented
 
-- **Correcting Outdated Information**: If you find that any part of this document is inaccurate or no longer relevant, please correct it immediately.
+- **Find outdated or incorrect information** in any documentation
 
-- **Adding Helpful Information**: If you find yourself repeatedly discovering the same information, consider adding it to this guide to help future agents. This could be a new helpful command, a common workflow, or a link to a useful resource.
+- **Learn non-obvious tool behaviors** or workarounds
 
-Think of this as contributing to the collective knowledge of the team. Your updates will help all future agents get up to speed faster and avoid common pitfalls.
+- **Implement architectural changes** that affect the design or concepts
+
+- **Add new features** that change how the system works
+
+### Key Documentation Files
+
+- **[AGENTS](AGENTS.md)** (this file): Agent workflows, toolchain, and conventions
+
+- **[docs/Design](docs/Design.md)**: High-level architecture, concepts, and design decisions
+
+- **[docs/Plugin Protocol](docs/Plugin%20Protocol.md)**: The specification of how Dotfilet core and plugins communicate.
+
+- **[docs/Roadmap](docs/Roadmap.md)**: Future features and ideas that are under consideration.
+
+> [!IMPORTANT]
+>
+> Always update both AGENTS.md and relevant docs/ files when making changes that affect project architecture or workflows.
 
 ## Issue Tracking
 
