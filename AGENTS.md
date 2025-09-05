@@ -39,10 +39,7 @@ This section describes the preferred workflow for contributing to this project.
 - **Tracked in GitHub**: All work is tracked via GitHub Issues.
   - Use sub-issues to break down larger pieces of work.
 
-- **Atomic Tasks**: Each leaf issue should represent a small, atomic piece of work.
-  - Aim for pull requests with around 300 changed lines or less, though this is not a strict rule.
-
-- **Clear Description**: Every issue's body should clearly describe the desired outcome, motivation, and requirements.
+- **Issue Templates**: Use an appropriate [issue template]((.github/ISSUE_TEMPLATE) (such as the [task template](.github/ISSUE_TEMPLATE/task.md)) to ensure all necessary information is included.
 
 - **Collaboration**: Use issue comments for notes, ideas, and discussing progress.
 
