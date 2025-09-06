@@ -1,15 +1,41 @@
-use clap::builder::{styling::AnsiColor, styling::Style, Styles};
+use clap::builder::{styling::AnsiColor, styling::Color, styling::Style, Styles};
 
-pub fn get_custom_styles() -> Styles {
-    let blue = Some(AnsiColor::Blue.into());
-    let green = Some(AnsiColor::Green.into());
-    let magenta = Some(AnsiColor::Magenta.into());
-    let yellow = Some(AnsiColor::Yellow.into());
+const BLUE: Option<Color> = Some(Color::Ansi(AnsiColor::Blue));
+const CYAN: Option<Color> = Some(Color::Ansi(AnsiColor::Cyan));
+// const GREEN: Option<Color> = Some(Color::Ansi(AnsiColor::Green));
+const MAGENTA: Option<Color> = Some(Color::Ansi(AnsiColor::Magenta));
+const YELLOW: Option<Color> = Some(Color::Ansi(AnsiColor::Yellow));
 
-    Styles::default()
-        .header(Style::new().fg_color(magenta).bold())
-        .usage(Style::new().fg_color(magenta).bold())
-        .literal(Style::new().fg_color(blue).bold())
-        .invalid(Style::new().fg_color(yellow))
-        .placeholder(Style::new().fg_color(green))
+pub const LONG_ABOUT: Style = Style::new().fg_color(CYAN);
+pub const HEADER: Style = Style::new().fg_color(YELLOW).bold();
+pub const LITERAL: Style = Style::new().fg_color(MAGENTA).bold();
+pub const PLACEHOLDER: Style = Style::new().fg_color(BLUE);
+pub const INVALID: Style = Style::new().fg_color(YELLOW);
+
+pub const CUSTOM_STYLES: Styles = Styles::plain()
+    .header(HEADER)
+    .invalid(INVALID)
+    .literal(LITERAL)
+    .placeholder(PLACEHOLDER)
+    .usage(HEADER);
+
+pub fn about(text: &str) -> &str {
+    return text;
+}
+
+pub fn long_about(text: &str) -> String {
+    format!("{LONG_ABOUT}{text}{LONG_ABOUT:#}")
+}
+
+pub fn examples(examples: &[(&str, &str)]) -> String {
+    let max_command_length = examples.iter().map(|(cmd, _)| cmd.len()).max().unwrap_or(0);
+
+    let mut result = String::new();
+    result.push_str(&format!("{HEADER}Examples{HEADER:#}:\n"));
+    for (cmd, desc) in examples {
+        let padding = " ".repeat(max_command_length - cmd.len());
+        result.push_str(&format!("    {LITERAL}{cmd}{LITERAL:#}{padding}  {desc}\n"));
+    }
+
+    result
 }

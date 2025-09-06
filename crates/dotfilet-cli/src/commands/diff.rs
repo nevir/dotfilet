@@ -1,25 +1,27 @@
+use crate::styles;
+use crate::styles::CUSTOM_STYLES;
+use crate::styles::{HEADER, LITERAL};
 use clap::Parser;
-use crate::styles::get_custom_styles;
 
 #[derive(Parser)]
-#[command(about = "Display pending configuration changes")]
+#[command(about = styles::about("Display pending configuration changes"))]
 #[command(
-    long_about = "Compare your current system state against the desired configuration
+    long_about = styles::long_about("Compare your current system state against the desired configuration
 and display what changes would be applied. This is effectively a 'dry-run' mode
-that shows you exactly what Dotfilet would do without making any changes."
+that shows you exactly what Dotfilet would do without making any changes.")
 )]
-#[command(after_help = "Examples:
-    dotfilet diff                     Show all pending changes
-    dotfilet diff programs.vscode     Show only VS Code changes
-    dotfilet diff macos.dock          Show only Dock configuration changes
-    dotfilet diff programs.vscode programs.chrome   Show changes for multiple programs
-    
-Resource Examples:
-    programs.vscode                   Specific application
-    programs.vscode.settings          Application subsection
-    macos.dock                        System component
-    macos.dock.autohide              Specific setting")]
-#[command(styles = get_custom_styles())]
+#[command(after_help = format!( "{HEADER}Examples{HEADER:#}
+    {LITERAL}dotfilet diff{LITERAL:#}                     Show all pending changes
+    {LITERAL}dotfilet diff programs.vscode{LITERAL:#}     Show only VS Code changes
+    {LITERAL}dotfilet diff macos.dock{LITERAL:#}          Show only Dock configuration changes
+    {LITERAL}dotfilet diff programs.vscode programs.chrome{LITERAL:#}   Show changes for multiple programs
+
+{HEADER}Resource Examples{HEADER:#}
+    {LITERAL}programs.vscode{LITERAL:#}                   Specific application
+    {LITERAL}programs.vscode.settings{LITERAL:#}          Application subsection
+    {LITERAL}macos.dock{LITERAL:#}                        System component
+    {LITERAL}macos.dock.autohide{LITERAL:#}               Specific setting"))]
+#[command(styles = CUSTOM_STYLES)]
 pub struct DiffCommand {
     #[arg(help = "Specific resources to check for changes (e.g., programs.vscode, macos.dock)")]
     pub resources: Vec<String>,

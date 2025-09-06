@@ -1,5 +1,5 @@
+use crate::styles::CUSTOM_STYLES;
 use clap::Parser;
-use crate::styles::get_custom_styles;
 
 #[derive(Parser)]
 #[command(about = "Scaffold a new Dotfilet repository")]
@@ -10,14 +10,14 @@ you need to start managing your system configuration declaratively."
 )]
 #[command(after_help = "Examples:
     dotfilet init                     Initialize repository in current directory
-    
+
 This command creates:
     • hosts/          - Host-specific configuration overrides
-    • macos/          - macOS system configuration  
+    • macos/          - macOS system configuration
     • programs/       - Application-specific configuration
     • variables.cue   - Configuration variables
     • .dotfilet/      - Local metadata directory")]
-#[command(styles = get_custom_styles())]
+#[command(styles = CUSTOM_STYLES)]
 pub struct InitCommand;
 
 impl InitCommand {

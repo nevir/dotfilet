@@ -1,24 +1,26 @@
+use crate::styles;
+use crate::styles::CUSTOM_STYLES;
+use crate::styles::{HEADER, LITERAL};
 use clap::Parser;
-use crate::styles::get_custom_styles;
 
 #[derive(Parser)]
-#[command(about = "Apply configuration changes to the system")]
+#[command(about = styles::about("Apply configuration changes to the system"))]
 #[command(
-    long_about = "Apply your Dotfilet configuration to the current system, making all
+    long_about = styles::long_about("Apply your Dotfilet configuration to the current system, making all
 necessary changes to bring the system state in line with your declared configuration.
-This automatically starts the sync agent after successful application."
+This automatically starts the sync agent after successful application.")
 )]
-#[command(after_help = "Examples:
-    dotfilet apply                    Apply all configuration changes
-    dotfilet apply programs.vscode    Apply only VS Code configuration
-    dotfilet apply --plan changes.json   Apply changes from a plan file
-    dotfilet apply macos.dock programs.chrome   Apply multiple specific resources
-    
-Workflow:
-    1. dotfilet diff                  Preview changes first
-    2. dotfilet apply                 Apply the changes
-    3. Agent starts automatically     Background sync begins")]
-#[command(styles = get_custom_styles())]
+#[command(after_help = format!( "{HEADER}Examples{HEADER:#}:
+    {LITERAL}dotfilet apply{LITERAL:#}                    Apply all configuration changes
+    {LITERAL}dotfilet apply programs.vscode{LITERAL:#}    Apply only VS Code configuration
+    {LITERAL}dotfilet apply --plan changes.json{LITERAL:#}   Apply changes from a plan file
+    {LITERAL}dotfilet apply macos.dock programs.chrome{LITERAL:#}   Apply multiple specific resources
+
+{HEADER}Workflow{HEADER:#}:
+    1. {LITERAL}dotfilet diff{LITERAL:#}                  Preview changes first
+    2. {LITERAL}dotfilet apply{LITERAL:#}                 Apply the changes
+    3. {LITERAL}Agent starts automatically{LITERAL:#}     Background sync begins" ))]
+#[command(styles = CUSTOM_STYLES)]
 pub struct ApplyCommand {
     #[arg(help = "Specific resources to apply (e.g., programs.vscode, macos.dock)")]
     pub resources: Vec<String>,

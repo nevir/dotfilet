@@ -1,5 +1,5 @@
+use crate::styles::CUSTOM_STYLES;
 use clap::Parser;
-use crate::styles::get_custom_styles;
 
 #[derive(Parser)]
 #[command(about = "Start the sync agent")]
@@ -10,14 +10,14 @@ through system preferences or application settings and update your configuration
 )]
 #[command(after_help = "Examples:
     dotfilet agent start             Start the agent daemon
-    
+
 The agent monitors:
     • macOS system preferences (Dock, Security, etc.)
     • Application settings and preferences
     • File system changes in monitored locations
-    
+
 Changes are automatically written back to your .cue configuration files.")]
-#[command(styles = get_custom_styles())]
+#[command(styles = CUSTOM_STYLES)]
 pub struct StartCommand;
 
 impl StartCommand {
