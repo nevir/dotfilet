@@ -2,11 +2,20 @@ use crate::command::*;
 
 #[derive(Parser)]
 /// Display pending configuration changes
-#[command(examples = &["asdf", "fdsa"])]
+#[command(examples = &[
+    "",
+    "--plan plan.json",
+    "programs.vscode macos.dock",
+    "\"macos.*\""
+])]
 pub(crate) struct DiffCommand {
     /// Specific resources to check for changes
     #[arg()]
     resources: Vec<String>,
+
+    /// Write the diff to a plan file, for use with `apply --plan`
+    #[arg(long)]
+    plan: Option<String>,
 }
 
 impl DiffCommand {

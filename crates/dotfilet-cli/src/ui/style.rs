@@ -1,5 +1,11 @@
 #![allow(dead_code)]
-use clap::builder::styling::{AnsiColor, Color, Style, Styles};
+
+use clap::builder::{
+    styling::{AnsiColor, Color, Style, Styles},
+    StyledStr,
+};
+use regex::Regex;
+use std::sync::LazyLock;
 
 const BLACK: Option<Color> = Some(Color::Ansi(AnsiColor::Black));
 const BLUE: Option<Color> = Some(Color::Ansi(AnsiColor::Blue));
@@ -58,4 +64,15 @@ pub(crate) fn format_examples(command: &str, examples: &[&str]) -> String {
         .join("\n");
 
     format!("{HEADER}Examples:{HEADER:#}\n{formatted_examples}")
+}
+
+pub(crate) fn format_markup(text: &StyledStr) -> String {
+    static INLINE_CODE_REGEX: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"`(.*)`").unwrap());
+
+    return INLINE_CODE_REGEX
+        .replace_all(
+            text.ansi().to_string().as_str(),
+            format!("{LITERAL}$1{LITERAL:#}"),
+        )
+        .to_string();
 }

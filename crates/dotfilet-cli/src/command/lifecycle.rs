@@ -2,12 +2,13 @@ use clap::Command;
 
 use crate::{
     command::examples::DotfiletCommandExamples,
-    ui::style::{get_help_template, STYLES},
+    ui::style::{format_markup, get_help_template, STYLES},
 };
 
 pub(crate) trait DotfiletCommandLifecycle {
     fn postprocess_dotfilet_command(self) -> Self;
     fn _postprocess_inner(self) -> Self;
+    fn _postprocess_descriptions(self) -> Self;
 }
 
 impl DotfiletCommandLifecycle for Command {
@@ -26,8 +27,20 @@ impl DotfiletCommandLifecycle for Command {
 
     fn _postprocess_inner(mut self) -> Self {
         self = self.help_template(get_help_template());
+        self = self._postprocess_descriptions();
         self = self._postprocess_examples();
 
         self.mut_subcommands(|sub| sub._postprocess_inner())
+    }
+
+    fn _postprocess_descriptions(self) -> Self {
+        self.mut_args(|mut arg| {
+            if let Some(help) = arg.get_help() {
+                let new_help = format_markup(help);
+                arg = arg.help(new_help);
+            }
+
+            arg
+        })
     }
 }
