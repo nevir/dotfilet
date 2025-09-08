@@ -3,25 +3,27 @@ pub(crate) mod apply;
 pub(crate) mod diff;
 pub(crate) mod init;
 
+use crate::macros::dotfilet_command;
 use clap::{Parser, Subcommand};
 
-use crate::ui::style::{get_help_template, STYLES};
+dotfilet_command! {
+    #[command(version, about)]
+    #[command(name = "dotfilet")] // not the inferred "dotfilet-cli"
+    pub(crate) struct RootCommand {
+        #[command(flatten)]
+        pub(crate) global: GlobalArgs,
 
-#[derive(Parser)]
-#[command(version, about)]
-#[command(name = "dotfilet")] // not the inferred "dotfilet-cli"
-#[command(styles = STYLES)]
-#[command(help_template = get_help_template())]
-pub(crate) struct RootCommand {
-    #[command(flatten)]
-    pub(crate) global: GlobalArgs,
-
-    #[command(subcommand)]
-    pub(crate) command: Commands,
+        #[command(subcommand)]
+        pub(crate) command: Commands,
+    }
 }
 
 #[derive(Parser)]
 pub(crate) struct GlobalArgs {
+    /// Path to the Dotfilet repository to use.
+    #[arg(long, global = true, default_value = ".")]
+    pub(crate) project: String,
+
     /// Enable verbose output
     #[arg(long, global = true)]
     pub(crate) verbose: bool,

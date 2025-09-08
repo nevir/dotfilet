@@ -1,19 +1,26 @@
-use clap::builder::styling::{AnsiColor, Effects, Style, Styles};
+use clap::builder::styling::{Style, Styles};
+// use clap::builder::styling::{AnsiColor, Color, Style, Styles};
 
-//pub(crate) const NOP: Style = Style::new();
-pub(crate) const HEADER: Style = AnsiColor::Green.on_default().effects(Effects::BOLD);
-pub(crate) const USAGE: Style = AnsiColor::Green.on_default().effects(Effects::BOLD);
-pub(crate) const LITERAL: Style = AnsiColor::Cyan.on_default().effects(Effects::BOLD);
-pub(crate) const PLACEHOLDER: Style = AnsiColor::Cyan.on_default();
-pub(crate) const ERROR: Style = AnsiColor::Red.on_default().effects(Effects::BOLD);
-//pub(crate) const WARN: Style = AnsiColor::Yellow.on_default().effects(Effects::BOLD);
-//pub(crate) const NOTE: Style = AnsiColor::Cyan.on_default().effects(Effects::BOLD);
-//pub(crate) const GOOD: Style = AnsiColor::Green.on_default().effects(Effects::BOLD);
-pub(crate) const VALID: Style = AnsiColor::Cyan.on_default().effects(Effects::BOLD);
-pub(crate) const INVALID: Style = AnsiColor::Yellow.on_default().effects(Effects::BOLD);
+// const BLUE: Option<Color> = Some(Color::Ansi(AnsiColor::Blue));
+// const GREEN: Option<Color> = Some(Color::Ansi(AnsiColor::Green));
+// const YELLOW: Option<Color> = Some(Color::Ansi(AnsiColor::Yellow));
+// const RED: Option<Color> = Some(Color::Ansi(AnsiColor::Red));
+// const CYAN: Option<Color> = Some(Color::Ansi(AnsiColor::Cyan));
+// const MAGENTA: Option<Color> = Some(Color::Ansi(AnsiColor::Magenta));
 
-/// Cargo's color style
-/// [source](https://github.com/crate-ci/clap-cargo/blob/master/src/style.rs)
+pub(crate) const HEADER: Style = Style::new().bold();
+pub(crate) const USAGE: Style = Style::new();
+pub(crate) const LITERAL: Style = Style::new();
+pub(crate) const PLACEHOLDER: Style = Style::new();
+pub(crate) const VALID: Style = Style::new();
+pub(crate) const INVALID: Style = Style::new();
+pub(crate) const ERROR: Style = Style::new();
+pub(crate) const CONTEXT: Style = Style::new().dimmed();
+pub(crate) const CONTEXT_VALUE: Style = Style::new();
+// //pub(crate) const WARN: Style = Style::new().fg_color(YELLOW).bold();
+// //pub(crate) const NOTE: Style = Style::new().fg_color(CYAN).bold();
+// //pub(crate) const GOOD: Style = Style::new().fg_color(GREEN).bold();
+
 pub(crate) const STYLES: Styles = Styles::styled()
     .header(HEADER)
     .usage(USAGE)
@@ -21,7 +28,9 @@ pub(crate) const STYLES: Styles = Styles::styled()
     .placeholder(PLACEHOLDER)
     .error(ERROR)
     .valid(VALID)
-    .invalid(INVALID);
+    .invalid(INVALID)
+    .context(CONTEXT)
+    .context_value(CONTEXT_VALUE);
 
 pub(crate) fn get_help_template() -> String {
     format!(

@@ -1,8 +1,9 @@
-use clap::Parser;
+use crate::macros::dotfilet_command;
 
-/// Start the sync agent
-#[derive(Parser)]
-pub(crate) struct StartCommand;
+dotfilet_command! {
+    /// Start the sync agent
+    pub(crate) struct StartCommand;
+}
 
 impl StartCommand {
     pub(crate) fn execute(self) {

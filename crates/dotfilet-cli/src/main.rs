@@ -1,4 +1,5 @@
 mod commands;
+mod macros;
 mod ui;
 
 use clap::Parser;

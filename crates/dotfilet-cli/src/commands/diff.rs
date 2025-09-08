@@ -1,11 +1,12 @@
-use clap::Parser;
+use crate::macros::dotfilet_command;
 
-/// Display pending configuration changes
-#[derive(Parser)]
-pub(crate) struct DiffCommand {
-    /// Specific resources to check for changes
-    #[arg()]
-    resources: Vec<String>,
+dotfilet_command! {
+    /// Display pending configuration changes
+    pub(crate) struct DiffCommand {
+        /// Specific resources to check for changes
+        #[arg()]
+        resources: Vec<String>,
+    }
 }
 
 impl DiffCommand {

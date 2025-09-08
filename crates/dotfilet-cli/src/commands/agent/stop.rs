@@ -1,8 +1,9 @@
-use clap::Parser;
+use crate::macros::dotfilet_command;
 
-/// Stop the sync agent
-#[derive(Parser)]
-pub(crate) struct StopCommand;
+dotfilet_command! {
+    /// Stop the sync agent
+    pub(crate) struct StopCommand;
+}
 
 impl StopCommand {
     pub(crate) fn execute(self) {

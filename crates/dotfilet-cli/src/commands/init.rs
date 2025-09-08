@@ -1,8 +1,9 @@
-use clap::Parser;
+use crate::macros::dotfilet_command;
 
-/// Scaffold a new Dotfilet repository
-#[derive(Parser)]
-pub(crate) struct InitCommand;
+dotfilet_command! {
+    /// Scaffold a new Dotfilet repository
+    pub(crate) struct InitCommand;
+}
 
 impl InitCommand {
     pub(crate) fn execute(self) {
