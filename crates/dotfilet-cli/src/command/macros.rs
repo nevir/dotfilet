@@ -14,7 +14,8 @@ macro_rules! dotfilet_command {
     // Internal rule for applying common config
     (@apply_config $(#[$meta:meta])* $vis:vis struct $name:ident $($rest:tt)*) => {
         #[allow(unused_imports)]
-        use $crate::command::dotfilet_command::DotfiletCommand as _;
+        use $crate::command::dotfilet_command::DotfiletCommandAttributes as _;
+        use $crate::command::dotfilet_command::DotfiletCommandLifecycle as _;
 
         #[derive(clap::Parser)]
         #[command(setup_dotfilet_command = "no-op")]

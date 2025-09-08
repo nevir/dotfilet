@@ -6,11 +6,10 @@ pub(crate) mod init;
 use crate::dotfilet_command;
 use clap::{Parser, Subcommand};
 
-use crate::command::dotfilet_command::DotfiletCommand;
-
 dotfilet_command! {
     #[command(version, about)]
     #[command(name = "dotfilet")] // not the inferred "dotfilet-cli"
+    #[command(arg_required_else_help = true)]
     pub(crate) struct RootCommand {
         #[command(flatten)]
         pub(crate) global: GlobalArgs,

@@ -2,6 +2,7 @@ use crate::dotfilet_command;
 
 dotfilet_command! {
     /// Display pending configuration changes
+    #[command(examples = &["asdf", "fdsa"])]
     pub(crate) struct DiffCommand {
         /// Specific resources to check for changes
         #[arg()]
