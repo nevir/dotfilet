@@ -1,7 +1,7 @@
 use clap::Parser;
 
+/// Stop the sync agent
 #[derive(Parser)]
-#[command(about = "Stop the sync agent")]
 pub struct StopCommand;
 
 impl StopCommand {

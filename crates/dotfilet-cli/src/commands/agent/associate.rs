@@ -1,7 +1,7 @@
 use clap::Parser;
 
+/// Configure the sync agent to use current configuration
 #[derive(Parser)]
-#[command(about = "Configure the sync agent to use current configuration")]
 pub struct AssociateCommand;
 
 impl AssociateCommand {

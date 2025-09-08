@@ -3,7 +3,24 @@ pub mod apply;
 pub mod diff;
 pub mod init;
 
-use clap::Subcommand;
+use clap::{Parser, Subcommand};
+
+#[derive(Parser)]
+#[command(version, about, name = "dotfilet")]
+pub struct RootCommand {
+    #[command(flatten)]
+    pub global: GlobalArgs,
+
+    #[command(subcommand)]
+    pub command: Commands,
+}
+
+#[derive(Parser)]
+pub struct GlobalArgs {
+    /// Enable verbose output
+    #[arg(long, global = true)]
+    pub verbose: bool,
+}
 
 #[derive(Subcommand)]
 pub enum Commands {

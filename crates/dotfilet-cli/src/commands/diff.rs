@@ -1,9 +1,10 @@
 use clap::Parser;
 
+/// Display pending configuration changes
 #[derive(Parser)]
-#[command(about = "Display pending configuration changes")]
 pub struct DiffCommand {
-    #[arg(help = "Specific resources to check for changes")]
+    /// Specific resources to check for changes
+    #[arg()]
     pub resources: Vec<String>,
 }
 

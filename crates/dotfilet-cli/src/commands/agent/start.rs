@@ -1,7 +1,7 @@
 use clap::Parser;
 
+/// Start the sync agent
 #[derive(Parser)]
-#[command(about = "Start the sync agent")]
 pub struct StartCommand;
 
 impl StartCommand {

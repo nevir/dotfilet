@@ -4,8 +4,8 @@ pub mod stop;
 
 use clap::{Parser, Subcommand};
 
+/// Manage the sync agent
 #[derive(Parser)]
-#[command(about = "Manage the sync agent")]
 pub struct AgentCommand {
     #[command(subcommand)]
     pub command: AgentCommands,

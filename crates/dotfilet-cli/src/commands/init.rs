@@ -1,7 +1,7 @@
 use clap::Parser;
 
+/// Scaffold a new Dotfilet repository
 #[derive(Parser)]
-#[command(about = "Scaffold a new Dotfilet repository")]
 pub struct InitCommand;
 
 impl InitCommand {
