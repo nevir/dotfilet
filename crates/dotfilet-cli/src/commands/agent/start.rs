@@ -1,9 +1,9 @@
-use crate::dotfilet_command;
+use crate::command::*;
 
-dotfilet_command! {
-    /// Start the sync agent
-    pub(crate) struct StartCommand;
-}
+#[derive(Parser)]
+/// Start the sync agent
+#[command(examples = &["asdf", "fdsa"])]
+pub(crate) struct StartCommand;
 
 impl StartCommand {
     pub(crate) fn execute(self) {

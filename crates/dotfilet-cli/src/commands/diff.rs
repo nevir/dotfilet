@@ -1,13 +1,12 @@
-use crate::dotfilet_command;
+use crate::command::*;
 
-dotfilet_command! {
-    /// Display pending configuration changes
-    #[command(examples = &["asdf", "fdsa"])]
-    pub(crate) struct DiffCommand {
-        /// Specific resources to check for changes
-        #[arg()]
-        resources: Vec<String>,
-    }
+#[derive(Parser)]
+/// Display pending configuration changes
+#[command(examples = &["asdf", "fdsa"])]
+pub(crate) struct DiffCommand {
+    /// Specific resources to check for changes
+    #[arg()]
+    resources: Vec<String>,
 }
 
 impl DiffCommand {

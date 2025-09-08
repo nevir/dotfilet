@@ -1,9 +1,8 @@
-use crate::dotfilet_command;
+use crate::command::*;
 
-dotfilet_command! {
-    /// Configure the sync agent to use current configuration
-    pub(crate) struct AssociateCommand;
-}
+#[derive(Parser)]
+/// Configure the sync agent to use current configuration
+pub(crate) struct AssociateCommand;
 
 impl AssociateCommand {
     pub(crate) fn execute(self) {

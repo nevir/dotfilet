@@ -13,7 +13,8 @@ const WHITE: Option<Color> = Some(Color::Ansi(AnsiColor::White));
 pub(crate) const TLDR: Style = Style::new().fg_color(GREEN).dimmed();
 pub(crate) const HEADER: Style = Style::new().bold().dimmed();
 pub(crate) const LITERAL: Style = Style::new().fg_color(YELLOW);
-pub(crate) const EXAMPLE: Style = Style::new().fg_color(YELLOW).dimmed();
+pub(crate) const EXAMPLE_COMMAND: Style = Style::new().fg_color(YELLOW).dimmed();
+pub(crate) const EXAMPLE_ARGUMENTS: Style = Style::new().fg_color(CYAN).dimmed();
 pub(crate) const ARGUMENT: Style = Style::new().fg_color(CYAN);
 pub(crate) const ERROR: Style = Style::new().fg_color(RED);
 pub(crate) const CONTEXT: Style = Style::new().dimmed();
@@ -50,7 +51,9 @@ pub(crate) fn get_help_template() -> String {
 pub(crate) fn format_examples(command: &str, examples: &[&str]) -> String {
     let formatted_examples = examples
         .iter()
-        .map(|example| format!("  {PROMPT}$ {PROMPT:#}{EXAMPLE}{command} {example}{EXAMPLE:#}"))
+        .map(|example| {
+            format!("  {PROMPT}$ {PROMPT:#}{EXAMPLE_COMMAND}{command}{EXAMPLE_COMMAND:#} {EXAMPLE_ARGUMENTS}{example}{EXAMPLE_ARGUMENTS:#}")
+        })
         .collect::<Vec<_>>()
         .join("\n");
 

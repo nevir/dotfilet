@@ -2,10 +2,10 @@ mod command;
 mod commands;
 mod ui;
 
+use crate::command::*;
+
 use clap::{CommandFactory, FromArgMatches};
 use commands::RootCommand;
-
-use crate::command::dotfilet_command::DotfiletCommandLifecycle;
 
 fn main() {
     let mut cmd = RootCommand::command_for_update();

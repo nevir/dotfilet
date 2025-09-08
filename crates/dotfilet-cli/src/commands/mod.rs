@@ -3,20 +3,18 @@ pub(crate) mod apply;
 pub(crate) mod diff;
 pub(crate) mod init;
 
-use crate::dotfilet_command;
-use clap::{Parser, Subcommand};
+use crate::command::*;
 
-dotfilet_command! {
-    #[command(version, about)]
-    #[command(name = "dotfilet")] // not the inferred "dotfilet-cli"
-    #[command(arg_required_else_help = true)]
-    pub(crate) struct RootCommand {
-        #[command(flatten)]
-        pub(crate) global: GlobalArgs,
+#[derive(Parser)]
+#[command(version, about)]
+#[command(name = "dotfilet")] // not the inferred "dotfilet-cli"
+#[command(arg_required_else_help = true)]
+pub(crate) struct RootCommand {
+    #[command(flatten)]
+    pub(crate) global: GlobalArgs,
 
-        #[command(subcommand)]
-        pub(crate) command: Commands,
-    }
+    #[command(subcommand)]
+    pub(crate) command: Commands,
 }
 
 #[derive(Parser)]

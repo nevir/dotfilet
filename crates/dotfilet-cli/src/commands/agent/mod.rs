@@ -2,15 +2,13 @@ pub(crate) mod associate;
 pub(crate) mod start;
 pub(crate) mod stop;
 
-use crate::dotfilet_command;
-use clap::Subcommand;
+use crate::command::*;
 
-dotfilet_command! {
-    /// Manage the sync agent
-    pub(crate) struct AgentCommand {
-        #[command(subcommand)]
-        pub(crate) command: AgentCommands,
-    }
+#[derive(Parser)]
+/// Manage the sync agent
+pub(crate) struct AgentCommand {
+    #[command(subcommand)]
+    pub(crate) command: AgentCommands,
 }
 
 #[derive(Subcommand)]
