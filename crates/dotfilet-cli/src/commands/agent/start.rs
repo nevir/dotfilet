@@ -1,4 +1,4 @@
-use crate::macros::dotfilet_command;
+use crate::dotfilet_command;
 
 dotfilet_command! {
     /// Start the sync agent

@@ -3,8 +3,10 @@ pub(crate) mod apply;
 pub(crate) mod diff;
 pub(crate) mod init;
 
-use crate::macros::dotfilet_command;
+use crate::dotfilet_command;
 use clap::{Parser, Subcommand};
+
+use crate::command::dotfilet_command::DotfiletCommand;
 
 dotfilet_command! {
     #[command(version, about)]
@@ -21,7 +23,7 @@ dotfilet_command! {
 #[derive(Parser)]
 pub(crate) struct GlobalArgs {
     /// Path to the Dotfilet repository to use.
-    #[arg(long, global = true, default_value = ".")]
+    #[arg(short, long, global = true, default_value = ".")]
     pub(crate) project: String,
 
     /// Enable verbose output

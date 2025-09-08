@@ -5,6 +5,11 @@ rust = "1.89.0"
 
 # Tasks
 
+[tasks.dotfilet]
+description = "Run the Dotfilet CLI"
+quiet = true
+run = "cargo run --quiet --bin dotfilet --"
+
 [tasks.fix-style]
 description = "Auto-format files to address style/lint issues"
 run = "dprint fmt"

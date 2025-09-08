@@ -2,7 +2,7 @@ pub(crate) mod associate;
 pub(crate) mod start;
 pub(crate) mod stop;
 
-use crate::macros::dotfilet_command;
+use crate::dotfilet_command;
 use clap::Subcommand;
 
 dotfilet_command! {

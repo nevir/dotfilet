@@ -1,58 +1,46 @@
-use clap::builder::styling::{Style, Styles};
-// use clap::builder::styling::{AnsiColor, Color, Style, Styles};
+#![allow(dead_code)]
+use clap::builder::styling::{AnsiColor, Color, Style, Styles};
 
-// const BLUE: Option<Color> = Some(Color::Ansi(AnsiColor::Blue));
-// const GREEN: Option<Color> = Some(Color::Ansi(AnsiColor::Green));
-// const YELLOW: Option<Color> = Some(Color::Ansi(AnsiColor::Yellow));
-// const RED: Option<Color> = Some(Color::Ansi(AnsiColor::Red));
-// const CYAN: Option<Color> = Some(Color::Ansi(AnsiColor::Cyan));
-// const MAGENTA: Option<Color> = Some(Color::Ansi(AnsiColor::Magenta));
+const BLACK: Option<Color> = Some(Color::Ansi(AnsiColor::Black));
+const BLUE: Option<Color> = Some(Color::Ansi(AnsiColor::Blue));
+const CYAN: Option<Color> = Some(Color::Ansi(AnsiColor::Cyan));
+const GREEN: Option<Color> = Some(Color::Ansi(AnsiColor::Green));
+const MAGENTA: Option<Color> = Some(Color::Ansi(AnsiColor::Magenta));
+const RED: Option<Color> = Some(Color::Ansi(AnsiColor::Red));
+const YELLOW: Option<Color> = Some(Color::Ansi(AnsiColor::Yellow));
+const WHITE: Option<Color> = Some(Color::Ansi(AnsiColor::White));
 
-pub(crate) const HEADER: Style = Style::new().bold();
-pub(crate) const USAGE: Style = Style::new();
-pub(crate) const LITERAL: Style = Style::new();
-pub(crate) const PLACEHOLDER: Style = Style::new();
-pub(crate) const VALID: Style = Style::new();
-pub(crate) const INVALID: Style = Style::new();
-pub(crate) const ERROR: Style = Style::new();
+pub(crate) const TLDR: Style = Style::new().fg_color(GREEN).dimmed();
+pub(crate) const HEADER: Style = Style::new().bold().dimmed();
+pub(crate) const LITERAL: Style = Style::new().fg_color(YELLOW);
+pub(crate) const ARGUMENT: Style = Style::new().fg_color(CYAN);
+pub(crate) const ERROR: Style = Style::new().fg_color(RED);
 pub(crate) const CONTEXT: Style = Style::new().dimmed();
-pub(crate) const CONTEXT_VALUE: Style = Style::new();
-// //pub(crate) const WARN: Style = Style::new().fg_color(YELLOW).bold();
-// //pub(crate) const NOTE: Style = Style::new().fg_color(CYAN).bold();
-// //pub(crate) const GOOD: Style = Style::new().fg_color(GREEN).bold();
+pub(crate) const VALID: Style = Style::new().fg_color(GREEN);
+pub(crate) const INVALID: Style = Style::new().fg_color(YELLOW);
 
 pub(crate) const STYLES: Styles = Styles::styled()
     .header(HEADER)
-    .usage(USAGE)
+    .usage(HEADER)
     .literal(LITERAL)
-    .placeholder(PLACEHOLDER)
+    .placeholder(ARGUMENT)
     .error(ERROR)
     .valid(VALID)
     .invalid(INVALID)
     .context(CONTEXT)
-    .context_value(CONTEXT_VALUE);
+    .context_value(ARGUMENT);
 
 pub(crate) fn get_help_template() -> String {
     format!(
-        "\
-{HEADER}TESTING:{HEADER:#}
-name: {{name}}
-bin: {{bin}}
-version: {{version}}
-author: {{author}}
-author-with-newline: {{author-with-newline}}
-author-section: {{author-section}}
-about: {{about}}
-about-with-newline: {{about-with-newline}}
-about-section: {{about-section}}
-usage-heading: {{usage-heading}}
-usage: {{usage}}
-all-args: {{all-args}}
-options: {{options}}
-positionals: {{positionals}}
-subcommands: {{subcommands}}
-tab: {{tab}}
-after-help: {{after-help}}
-before-help: {{before-help}}"
+        "
+\u{200c}
+{{before-help}}{TLDR}{{about}}{TLDR:#}
+
+{{usage-heading}}
+{{tab}}{{usage}}
+
+{{all-args}}{{after-help}}
+\u{200c}
+"
     )
 }

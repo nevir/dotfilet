@@ -1,4 +1,4 @@
-/// Derives a [clap](https://docs.rs/clap) command and applies common configuration to it.
+/// Derives a [clap](https://docs.rs/clap) Command and applies common configuration to it.
 ///
 /// Usage:
 /// ```rust
@@ -13,9 +13,11 @@
 macro_rules! dotfilet_command {
     // Internal rule for applying common config
     (@apply_config $(#[$meta:meta])* $vis:vis struct $name:ident $($rest:tt)*) => {
+        #[allow(unused_imports)]
+        use $crate::command::dotfilet_command::DotfiletCommand as _;
+
         #[derive(clap::Parser)]
-        #[command(styles = $crate::ui::style::STYLES)]
-        #[command(help_template = $crate::ui::style::get_help_template())]
+        #[command(setup_dotfilet_command = "no-op")]
         $(#[$meta])*
         $vis struct $name $($rest)*
     };
@@ -40,6 +42,3 @@ macro_rules! dotfilet_command {
         dotfilet_command!(@apply_config $(#[$meta])* $vis struct $name;);
     };
 }
-
-// Re-export the macro for use in parent modules
-pub(crate) use dotfilet_command;
