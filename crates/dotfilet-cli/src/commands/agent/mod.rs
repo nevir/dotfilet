@@ -1,25 +1,25 @@
-pub mod associate;
-pub mod start;
-pub mod stop;
+pub(crate) mod associate;
+pub(crate) mod start;
+pub(crate) mod stop;
 
 use clap::{Parser, Subcommand};
 
 /// Manage the sync agent
 #[derive(Parser)]
-pub struct AgentCommand {
+pub(crate) struct AgentCommand {
     #[command(subcommand)]
-    pub command: AgentCommands,
+    pub(crate) command: AgentCommands,
 }
 
 #[derive(Subcommand)]
-pub enum AgentCommands {
+pub(crate) enum AgentCommands {
     Associate(associate::AssociateCommand),
     Start(start::StartCommand),
     Stop(stop::StopCommand),
 }
 
 impl AgentCommand {
-    pub fn execute(self) {
+    pub(crate) fn execute(self) {
         match self.command {
             AgentCommands::Associate(cmd) => cmd.execute(),
             AgentCommands::Start(cmd) => cmd.execute(),

@@ -2,14 +2,14 @@ use clap::Parser;
 
 /// Display pending configuration changes
 #[derive(Parser)]
-pub struct DiffCommand {
+pub(crate) struct DiffCommand {
     /// Specific resources to check for changes
     #[arg()]
-    pub resources: Vec<String>,
+    resources: Vec<String>,
 }
 
 impl DiffCommand {
-    pub fn execute(self) {
+    pub(crate) fn execute(self) {
         if self.resources.is_empty() {
             println!("dotfilet diff: Not yet implemented");
             println!("This command will show all pending configuration changes");
