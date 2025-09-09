@@ -24,6 +24,7 @@ Implement a task issue (work item or research task).
       - Inform the user that research is complete and ready for integration.
 
 3. For regular tasks (implementation work):
+
    1. Set up the git branch:
       - Determine the branch name: `<feature-issue-number>-<feature-name>/<task-issue-number>-<task-name>` (use kebab-case for names)
       - Check if this task depends on other tasks that haven't been merged to `main`:
@@ -31,10 +32,12 @@ Implement a task issue (work item or research task).
         - If no: branch off `main`
       - Create and switch to the new branch
    2. Review the acceptance criteria and technical notes.
+
    3. Understand the codebase context:
       - Search for relevant existing code and patterns.
       - Review related files mentioned in technical notes.
       - Check dependencies on other tasks.
+
    4. Implement the solution:
       - Follow existing code conventions and patterns.
       - Write clean, well-structured code.
@@ -44,13 +47,16 @@ Implement a task issue (work item or research task).
         - Commit logical units of work (e.g., after adding a function, fixing a bug, adding tests)
         - Use descriptive commit messages that reference the task issue
         - Push commits regularly to backup your work
+
    5. Validate against acceptance criteria:
       - Test each criterion from the acceptance criteria list.
       - Document any deviations or limitations.
       - Run relevant build/test commands to ensure no regressions.
+
    6. Complete the task:
       - Ensure all changes are committed and pushed.
-      - Create a pull request using the [PR template](/.github/pull_request_template.md):
+      - Read the [PR template](/.github/pull_request_template.md)
+      - Create a pull request following that template:
         - If this task branched off `main`: base the PR against `main`
         - If this task branched off another task's branch: base the PR against that task's branch (creating a PR stack)
         - Title the PR with the task name and reference the task issue

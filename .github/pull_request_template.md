@@ -17,7 +17,7 @@
 <!-- Copy the acceptance criteria from the task issue and check off completed items -->
 
 - [x] CLI accepts `completion` subcommand
-- [x] Shell detection works for bash, zsh, and fish  
+- [x] Shell detection works for bash, zsh, and fish
 - [ ] Completion scripts are generated correctly
 
 <!-- Add any additional validation performed -->
