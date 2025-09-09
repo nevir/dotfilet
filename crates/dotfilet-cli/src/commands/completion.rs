@@ -18,6 +18,7 @@ pub(crate) enum SupportedShell {
     Bash,
     Elvish,
     Fish,
+    #[value(name = "powershell")]
     PowerShell,
     Zsh,
 }
