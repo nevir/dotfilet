@@ -1,41 +1,35 @@
 ---
 name: Task
-about: Plan a new piece of work for this project
+about: Track actionable work required to implement a feature.
+labels: ["task"]
 ---
 
-> [!IMPORTANT]
->
-> Each leaf issue should represent a small, atomic piece of work. Aim for pull requests with around 300 changed lines or less where possible.
+<!--
+`Task` issues are ALWAYS sub-issues of a `Feature` issue (and may be sub-issues of other `Task` issues to represent epics).
 
-A clear and concise description of what the feature is. Every issue's body should clearly describe the desired outcome, motivation, and requirements.
+Tasks should be discrete, actionable work items that can be completed independently.
+-->
 
-## Requirements
+## Description
 
-- Build and compilation requirements
-- User interface and CLI behavior
-- Error handling and user experience
-- …
-
-## Out of Scope
-
-- Things that we should explicitly NOT do as part of this work.
+<!--
+Clear description of what needs to be accomplished. Be specific about the deliverable.
+Example: "Implement completion subcommand with shell detection and script generation"
+-->
 
 ## Acceptance Criteria
 
-- [ ] Measurable, testable outcomes that define when this work is complete
-- [ ] Specific behaviors and functionality that must work
-- [ ] Quality standards and performance requirements
-- [ ] Integration and compatibility requirements
-- [ ] …
+<!--
+Concrete, testable conditions that must be met for this task to be considered complete.
+Use bullet points for clarity:
+- [ ] Criterion 1
+- [ ] Criterion 2  
+- [ ] Criterion 3
+-->
 
 ## Technical Notes
 
-- Implementation approach and strategy
-- User experience / developer ergonomics
-- Integration considerations
-- Performance considerations
-- …
-
-## Alternatives Considered
-
-A clear and concise description of any alternative solutions or features you've considered.
+<!--
+Any technical details, constraints, or implementation notes that are relevant to completing this task.
+Examples: dependencies on other tasks, specific files to modify, integration points to consider.
+-->

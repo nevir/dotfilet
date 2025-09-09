@@ -5,7 +5,7 @@ rust = "1.89.0"
 
 # Tasks
 
-[tasks.dotfilet]
+[tasks.cli]
 description = "Run the Dotfilet CLI"
 quiet = true
 run = "cargo run --quiet --bin dotfilet --"

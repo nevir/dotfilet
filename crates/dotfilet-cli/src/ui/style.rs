@@ -16,7 +16,7 @@ const RED: Option<Color> = Some(Color::Ansi(AnsiColor::Red));
 const YELLOW: Option<Color> = Some(Color::Ansi(AnsiColor::Yellow));
 const WHITE: Option<Color> = Some(Color::Ansi(AnsiColor::White));
 
-pub(crate) const TLDR: Style = Style::new().fg_color(GREEN).dimmed();
+pub(crate) const TLDR: Style = Style::new().fg_color(GREEN).italic();
 pub(crate) const HEADER: Style = Style::new().bold().dimmed();
 pub(crate) const LITERAL: Style = Style::new().fg_color(YELLOW);
 pub(crate) const EXAMPLE_COMMAND: Style = Style::new().fg_color(YELLOW).dimmed();

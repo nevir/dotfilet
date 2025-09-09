@@ -1,65 +1,10 @@
 # AI Agent Context
 
-## Development Workflow
-
-> [!WARNING]
->
-> This workflow MUST be followed for every task. Failure to follow this workflow, especially creating a branch before making changes, will result in rejected modifications.
-
-### MANDATORY Steps (In Order):
-
-1. **📖 Read & Understand**: Thoroughly review the GitHub issue and all comments first.
-
-   - Make sure you understand [the high-level design of this project](docs/Design.md).
-   - If it's a sub-issue, review the parent issue and related sub-tasks.
-   - Formulate an initial to-do list of the steps you think you need to accomplish the task.
-     - If you have a built-in task tracking tool, use that.
-     - Otherwise, write your to-do list to a file
-   - **NO file system modifications during this step.**
-
-2. **🌿 Create Branch**: Create a new feature branch BEFORE any file changes.
-
-   ```bash
-   git checkout -b feat/descriptive-name
-   ```
-
-   - Use kebab-case names with prefixes: `feat/`, `fix/`, `refactor/`, etc.
-   - **This MUST happen before creating files, directories, or editing _anything_.**
-
-3. **📋 Initial To-Do List**: Formulate an initial to-do list of the steps you think you need to accomplish the task.
-
-   - If you have a built-in task tracking tool, use that.
-   - Otherwise, write your to-do list to a [scratch file](.scratch/) `.scratch/descriptive-name.md`.
-
-4. **⚡ Implementation**: Only now perform code modifications, file creation, etc.
-
-   - Refer to your to-do list frequently to figure out your next step(s).
-     - Update the to-do list as you complete tasks and/or learn new things.
-   - Follow existing code conventions and style.
-   - **Commit your changes as you go**:
-     - Group related changes into logical commits.
-     - Use descriptive commit messages that explain the "why" not just the "what".
-
-5. **✅ Verification**: Test and lint before concluding work.
-
-   - Run tests and linters to ensure quality.
-   - Verify all issue requirements are met.
-
-6. **🚀 Create Pull Request**: Push your branch and create a pull request.
-
-   ```bash
-   git push -u origin feat/descriptive-name
-   gh pr create --title "Clear descriptive title" --body "Detailed description"
-   ```
-
-   - Include a clear title and detailed description.
-   - Reference the GitHub issue being addressed.
-
-## Overview
+## Project Overview
 
 This project, `dotfilet`, is a declarative configuration management tool for developer environments, initially targeting macOS. It treats your machine's configuration as code, enabling versioning, sharing, and reliable reproduction.
 
-Key characteristics:
+**Key characteristics**:
 
 - **Declarative**: Define the desired state in CUE configuration files, and `dotfilet` handles the rest.
 
@@ -67,88 +12,69 @@ Key characteristics:
 
 - **Extensible**: A plugin system allows for managing various applications and system settings.
 
-For a deeper understanding of the project's design, architecture, and concepts, please refer to the documentation in the [`docs`](./docs/) directory.
+**Key documentation**:
 
-## Documentation Maintenance
+- [Design](./docs/Design.md): Provides a comprehensive overview of Dotfilet's vision, architecture and core concepts.
 
-This document and the entire `docs/` directory serve as living guides for AI agents. Keeping documentation current is essential for project success.
+- [Plugin Protocol](./docs/Plugin%20Protocol.md): A detailed specification of how plugins interact with the core application(s).
 
-### When to Update Documentation
+- [Roadmap](./docs/Roadmap.md): Future ideas to consider, but not yet specified/planned.
 
-Update documentation whenever you:
+## Repository Structure
 
-- **Discover new patterns or conventions** not yet documented
+**Language**: Rust (workspace with multiple crates)
 
-- **Find outdated or incorrect information** in any documentation
+**Key directories**:
 
-- **Learn non-obvious tool behaviors** or workarounds
+- `crates/`: Core Rust crates (dotfilet-cli, dotfilet-core, dotfilet-agent, dotfilet-rpc)
+- `docs/`: Design documents and specifications
+- `plugins/`: Plugin implementations
+- `.github/`: Issue templates and workflows
+- `.agents/`: Agent command specifications
 
-- **Implement architectural changes** that affect the design or concepts
+**Language-specific guidance**: [Link to coding standards doc when created]
 
-- **Add new features** that change how the system works
+## Development Workflow
 
-### Key Documentation Files
+**Tracked in GitHub**: All work is tracked via GitHub Issues, using a strict hierarchy of issue types:
 
-- **[AGENTS](AGENTS.md)** (this file): Agent workflows, toolchain, and conventions
+- `Feature`: A 'root' issue that tracks a feature from idea through to completion.
+  - `Spec`: A sub-issue of a `Feature` that defines the "what" and "why" of the feature, including scope and acceptance criteria.
+  - `Design`: A sub-issue of a `Feature` that is a technical blueprint outlining "how" the feature will be engineered and implemented.
+  - `Task`(s): Many sub-issues of a `Feature` that track the actionable work required to implement the feature.
+    - Tasks may themselves have other `Task` sub-issues (e.g. to represent 'epics').
 
-- **[docs/Design](docs/Design.md)**: High-level architecture, concepts, and design decisions
+## Tone and Behavior
 
-- **[docs/Plugin Protocol](docs/Plugin%20Protocol.md)**: The specification of how Dotfilet core and plugins communicate.
+- Criticism is welcome. Please tell me when I am wrong or mistaken, or even when you think I might be wrong or mistaken.
+- Please tell me if there is a better approach than the one I am taking.
+- Please tell me if there is a relevant standard or convention that I appear to be unaware of.
+- Be skeptical.
+- Be concise.
+- Short summaries are OK, but don't give an extended breakdown unless we are working through the details of a plan.
+- Do not flatter, and do not give compliments unless I am specifically asking for your judgement.
+- Occasional pleasantries are fine.
+- Feel free to ask many questions. If you are in doubt of my intent, don't guess. Ask.
 
-- **[docs/Roadmap](docs/Roadmap.md)**: Future features and ideas that are under consideration.
+## Tools
 
-> [!IMPORTANT]
->
-> Always update both AGENTS.md and relevant docs/ files when making changes that affect project architecture or workflows.
+IMPORTANT information to keep in mind when using tools.
 
-## Issue Tracking
+### Tool: GitHub
 
-- **Tracked in GitHub**: All work is tracked via GitHub Issues.
-  - Use sub-issues to break down larger pieces of work.
+- **When creating issues from templates** (GitHub MCP: `create_issue`):
+  - DO NOT include the YAML frontmatter.
+  - DO honor `labels` from the YAML frontmatter
 
-- **Issue Templates**: Use an appropriate [issue template]((.github/ISSUE_TEMPLATE) (such as the [task template](.github/ISSUE_TEMPLATE/task.md)) to ensure all necessary information is included.
+- **When creating sub-issues**:
+  - The sub-issue's title must be prefixed by the issue's ancestry, separated by `:`.
+    - E.g. "Shell Completion: Spec: Research popular shells" for a "Research popular shells" sub-issue of a "Spec" sub-issue of "Shell Completion".
+  - **IMPORTANT**: The GitHub MCP server requires issue `id`s (not `number`s) when adding sub-issues. Use the `id` field from the issue object, not the `number` field (the issue URL uses the `number`, not `id`).
 
-- **Collaboration**: Use issue comments for notes, ideas, and discussing progress.
-
-## Toolchain
-
-- [Mise](http://mise.jdx.dev/) is used to manage the toolchain.
-  - Arbitrary tools can be run via `mise exec -- COMMAND`
-
-    Example: `mise exec -- dprint fmt AGENTS.md`
-
-  - Common tasks are declared via Mise, and are run via `mise run TASK [ARGS…]`
-
-    - Tasks can be discovered via `mise task ls`, and are defined in [.mise.toml](./.mise.toml)
-
-### Important Tasks
-
-- After editing a file, ALWAYS run `mise run fix-style FILE` to auto-format it.
-
-- To format ALL files in the project, run `mise run fix-style` (without additional arguments).
-
-- To view the merged output of an example: `mise run example-config EXAMPLE-DIR-NAME`.
-
-  Example: `mise run example-config multi-host`
-
-## Style
-
-### Markdown Style
-
-- Write lists using the `-` character.
-
-- Leave a newline between each list item, unless the list is enumerating short items (names, etc).
-
-- **Labeled Lists**: When list items begin with a label, **bold** the text, but leave the `:` outside of the label.
-
-- Use markdown alerts for "asides" and other secondary information. There must always be a blank `>` line between the alert type and body
-
-  > [!NOTE]
-  >
-  > Supported alert types:
-  >
-  > - NOTE
-  > - TIP
-  > - IMPORTANT
-  > - WARNING
-  > - CAUTION
+- **Handling arbitrary GitHub issues**:
+  When asked to work on a GitHub issue URL (outside of a command), **ALWAYS first read the appropriate agent command before starting work**:
+  - If labeled `feature` and has no parent issues → Read and follow `.agents/commands/feature.md`
+  - If labeled `spec`, or titled with `Spec` suffix → Read and follow `.agents/commands/spec.md`
+  - If labeled `design`, or titled with `Design` suffix → Read and follow `.agents/commands/design.md`
+  - If labeled `task`, or appears to be implementation work → Read and follow `.agents/commands/work.md`
+  - For issues that don't clearly fit the workflow: Ask the user what type of work they want to perform on this issue
