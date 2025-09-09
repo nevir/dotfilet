@@ -1,4 +1,4 @@
-[Closes #<!-- task issue number -->] <!-- if applicable: --> [Depends on: #<!-- PR number -->] [Blocks: #<!-- issue/PR numbers -->]
+[Closes #<!-- task issue number -->] <!-- if applicable: --> [Depends on #<!-- PR number -->] [Blocks #<!-- issue/PR numbers -->]
 
 ## Description
 

@@ -61,13 +61,10 @@ Implement a task issue (work item or research task).
         - If this task branched off another task's branch: base the PR against that task's branch (creating a PR stack)
         - Title the PR with the task name and reference the task issue
         - Fill out the PR template completely:
-          - Link to the task issue using "Closes #<task-issue-number>" to auto-close when merged
+          - Fill in relevant issue/PR links at the top of the PR body.
           - Copy acceptance criteria from the task issue and mark completed items
           - Document changes made and testing performed
           - Note any dependencies on other PRs
-      - Update the task issue with implementation details and link to the PR.
-      - Mark all acceptance criteria as completed.
-      - Close the task issue.
       - If this task enables other blocked tasks, notify about unblocked dependencies.
 
 4. Handle complications:
