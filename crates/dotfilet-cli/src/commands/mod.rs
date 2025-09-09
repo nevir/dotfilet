@@ -1,5 +1,6 @@
 pub(crate) mod agent;
 pub(crate) mod apply;
+pub(crate) mod completion;
 pub(crate) mod diff;
 pub(crate) mod init;
 
@@ -34,6 +35,7 @@ pub(crate) enum Commands {
     Diff(diff::DiffCommand),
     Apply(apply::ApplyCommand),
     Agent(agent::AgentCommand),
+    Completion(completion::CompletionCommand),
 }
 
 impl Commands {
@@ -43,6 +45,7 @@ impl Commands {
             Commands::Diff(cmd) => cmd.execute(),
             Commands::Apply(cmd) => cmd.execute(),
             Commands::Agent(cmd) => cmd.execute(),
+            Commands::Completion(cmd) => cmd.execute(),
         }
     }
 }
