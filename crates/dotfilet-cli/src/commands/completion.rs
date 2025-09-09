@@ -16,16 +16,20 @@ pub(crate) struct CompletionCommand {
 #[derive(clap::ValueEnum, Clone, Debug)]
 pub(crate) enum SupportedShell {
     Bash,
-    Zsh,
+    Elvish,
     Fish,
+    PowerShell,
+    Zsh,
 }
 
 impl From<SupportedShell> for Shell {
     fn from(shell: SupportedShell) -> Self {
         match shell {
             SupportedShell::Bash => Shell::Bash,
-            SupportedShell::Zsh => Shell::Zsh,
+            SupportedShell::Elvish => Shell::Elvish,
             SupportedShell::Fish => Shell::Fish,
+            SupportedShell::PowerShell => Shell::PowerShell,
+            SupportedShell::Zsh => Shell::Zsh,
         }
     }
 }
@@ -36,8 +40,10 @@ impl TryFrom<Shell> for SupportedShell {
     fn try_from(shell: Shell) -> Result<Self, Self::Error> {
         match shell {
             Shell::Bash => Ok(SupportedShell::Bash),
-            Shell::Zsh => Ok(SupportedShell::Zsh),
+            Shell::Elvish => Ok(SupportedShell::Elvish),
             Shell::Fish => Ok(SupportedShell::Fish),
+            Shell::PowerShell => Ok(SupportedShell::PowerShell),
+            Shell::Zsh => Ok(SupportedShell::Zsh),
             _ => Err(format!("Unsupported shell: {:?}", shell)),
         }
     }
