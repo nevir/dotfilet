@@ -78,3 +78,15 @@ IMPORTANT information to keep in mind when using tools.
   - If labeled `design`, or titled with `Design` suffix → Read and follow `.agents/commands/design.md`
   - If labeled `task`, or appears to be implementation work → Read and follow `.agents/commands/work.md`
   - For issues that don't clearly fit the workflow: Ask the user what type of work they want to perform on this issue
+
+- **Finding sub-issues**: 
+  - Use GitHub search with `parent-issue:owner/repo#issue-number` to find all sub-issues of a parent issue
+  - Example: `parent-issue:nevir/dotfilet#68` finds all sub-issues of feature #68
+  - This is more efficient than using `list_sub_issues` when the response would be too large
+
+- **Creating pull requests without shell escaping issues**:
+  - Use single quotes around the `--body` parameter to avoid shell escaping problems
+  - Example: `gh pr create --title "Title" --body 'Line 1 of PR body
+Line 2 with $special characters
+Line 3 continues...'`
+  - This prevents shell interpretation of special characters in PR descriptions
