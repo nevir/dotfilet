@@ -8,7 +8,7 @@ use crate::command::*;
 #[derive(Parser)]
 /// Generate shell completion scripts
 pub(crate) struct CompletionCommand {
-    /// Shell to generate completion for
+    /// Shell to generate completion for (detected automatically)
     #[arg(value_enum)]
     pub(crate) shell: Option<SupportedShell>,
 }
