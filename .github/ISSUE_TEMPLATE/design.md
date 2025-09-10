@@ -39,7 +39,7 @@ Example: "Extend dotfilet-cli with completion subcommand, integrate clap_complet
 ## Technical Decisions
 
 <!--
-Key technical choices with brief rationale.
+Key technical choices with brief rationale for the chosen approach.
 Examples:
 - "Use clap_complete over custom completion - proven, maintained, integrates with existing clap usage"
 - "Generate scripts dynamically vs static files - allows runtime customization of completions"
@@ -63,11 +63,37 @@ Examples:
 - "Risk: Shell compatibility issues. Mitigation: Test across multiple shell versions, fallback gracefully"
 -->
 
+## Alternatives Considered
+
+<!--
+For each alternative, create a sub-section and document the pros, cons, and why it was not chosen.
+-->
+
+### Alternative: [Name]
+
+<!--
+Description of approach
+
+**Pros:**
+- Benefit 1
+- Benefit 2
+
+**Cons:**
+- Drawback 1
+- Drawback 2
+
+**Rationale for discarding:** Why we ultimately didn't choose it
+-->
+
+### Alternative: [Name]
+
+<!-- Repeat pattern above -->
+
 ## Implementation Notes
 
 <!--
 Decisions that can be made during implementation, with validation criteria.
 Examples:
 - "Specific clap_complete API usage - validate performance is <100ms"
-- "Shell detection method - test across target environments during implementation" 
+- "Shell detection method - test across target environments during implementation"
 -->

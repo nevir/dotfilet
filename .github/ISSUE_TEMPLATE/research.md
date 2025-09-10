@@ -36,26 +36,26 @@ Present the viable approaches you found, with honest pros/cons for each.
 Use subsections for each option:
 -->
 
-### Option 1: [Name]
+### Option: [Name]
 
 <!--
 Description of approach
-**Pros:** 
+**Pros:**
 - Benefit 1
 - Benefit 2
 
 **Cons:**
-- Drawback 1  
+- Drawback 1
 - Drawback 2
 -->
 
-### Option 2: [Name]
+### Option: [Name]
 
 <!-- Repeat pattern above -->
 
 ## Recommendation
 
 <!--
-Based on your research, what approach do you recommend and why? 
+Based on your research, what approach do you recommend and why?
 Include implementation details if relevant. Be clear about the reasoning that led to this choice.
 -->

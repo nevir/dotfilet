@@ -65,6 +65,7 @@ Author a technical design for the given feature.
    - No `[BLOCKS IMPLEMENTATION]` markers remain
    - All `[IMPLEMENTATION DECISION]` points have clear validation criteria
    - All technical decisions have clear rationale
+   - Alternative approaches are documented
    - Technical risks are identified with mitigation strategies
    - All research is complete
    - Architecture supports all requirements from the spec
